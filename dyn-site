@@ -11,8 +11,8 @@ echo "## do not modify since automatically generated" > $script
 case $cmd in
 new)
     ## répertoires à créer
-    mkdir bin
-    mkdir DockerFiles
+    mkdir -p bin
+    mkdir -p DockerFiles
     ## 
     rodaport=9700
     rodapublic=../RodaPublic
