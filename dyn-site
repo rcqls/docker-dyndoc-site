@@ -82,7 +82,7 @@ init)
     ;;
 add)
     # get RodaWebUser from environment variable
-    RodaWebUser=$2
+    RodaWebUser=$1
     if [ "$RodaWebUser" != "" ]; then
         echo "mkdir -p ${RootSrv}/edit/${RodaWebUser}" >>  $script 
         echo "mkdir -p ${RootSrv}/public/pages" >>  $script
