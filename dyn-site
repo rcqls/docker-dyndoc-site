@@ -92,7 +92,7 @@ init)
     ## Create the RodaSrv folders inside container
     echo "mkdir -p /home/ubuntu/RodaSrv/edit" >  $script
     echo "mkdir -p /home/ubuntu/RodaSrv/public" >>  $script
-    echo "cd RodaSrv"  >>  $script
+    echo "cd /home/ubuntu/RodaSrv"  >>  $script
     echo "ln -s .tools/system system" >>  $script
     echo "cd public"  >>  $script
     echo "ln -s ../.tools/tools tools" >>  $script
