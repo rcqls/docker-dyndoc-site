@@ -13,7 +13,7 @@ new)
     ## répertoires à créer
     mkdir bin
     mkdir DockerFiles
-    ##
+    ## 
     rodaport=9700
     rodapublic=./RodaPublic
     rodatools=$HOME/Share/Roda
@@ -82,9 +82,11 @@ RodaWebUser=$2
 if [ "$RodaWebUser" != "" ]; then
     echo "mkdir -p ${RootSrv}/edit/${RodaWebUser}" >>  $script 
     echo "mkdir -p ${RootSrv}/public/pages" >>  $script
-    echo "mkdir -p ${RootSrv}/public/users/${RodaWebUser}/pages/${RodaWebUser}" >>  $script
+    echo "mkdir -p ${RootSrv}/public/users/${RodaWebUser}/{.pages,.edit}" >>  $script
     echo "cd ${RootSrv}/public/pages" >>  $script
-    echo "ln -s ../users/${RodaWebUser}/pages/${RodaWebUser} ${RodaWebUser}" >>  $script
+    echo "ln -s ../users/${RodaWebUser}/.pages ${RodaWebUser}" >>  $script
+    echo "cd ${RootSrv}/edit" >>  $script
+    echo "ln -s ../public/users/${RodaWebUser}/.edit ${RodaWebUser}" >>  $script
     docker-compose exec --user ubuntu website bash /home/ubuntu/bin/.action.sh
 fi
 ;;
