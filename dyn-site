@@ -72,9 +72,12 @@ new)
 init)
 
     ## Create the RodaSrv folders inside container
-    echo "mkdir -p /home/ubuntu/RodaSrv/edit" >>  $script
+    echo "mkdir -p /home/ubuntu/RodaSrv/edit" >  $script
     echo "mkdir -p /home/ubuntu/RodaSrv/public" >>  $script
-    echo "mkdir -p /home/ubuntu/RodaSrv/system" >>  $script
+    echo "cd RodaSrv"  >>  $script
+    echo "ln -s .tools/system system" >>  $script
+    echo "cd public"  >>  $script
+    echo "ln -s ../.tools/tools tools" >>  $script
     ## Config file
     echo "echo '---' > /home/ubuntu/dyndoc/etc/dyn-html.yml" >> $script
     echo "echo 'root: /home/ubuntu/RodaSrv' >> /home/ubuntu/dyndoc/etc/dyn-html.yml" >> $script
