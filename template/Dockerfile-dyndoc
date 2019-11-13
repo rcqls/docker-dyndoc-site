@@ -1,0 +1,31 @@
+FROM ubuntu:DyndocRubyUbuntu
+MAINTAINER "Cqls Team"
+
+RUN groupadd -r ubuntu && useradd -r -g ubuntu ubuntu
+
+RUN apt-get update && \
+      apt-get -y install sudo
+
+RUN apt-get install -y curl wget locales
+
+RUN locale-gen fr_FR.UTF-8  
+ENV LANG fr_FR.UTF-8  
+ENV LANGUAGE fr_FR:fr  
+ENV LC_ALL fr_FR.UTF-8
+
+RUN bash -c "$(curl -fs https://cqls.dyndoc.fr/users/RCqls/Dyndoc/install/install-ubuntu16.sh)"
+
+EXPOSE 9294
+
+WORKDIR /home/ubuntu
+
+VOLUME ["/home/ubuntu/bin"]
+
+RUN chown -R ubuntu:ubuntu /home/ubuntu
+
+USER ubuntu
+
+RUN dyn-init
+
+RUN dpm install rcqls/DyndocWebTools.dyn
+RUN dpm link rcqls/DyndocWebTools.dyn

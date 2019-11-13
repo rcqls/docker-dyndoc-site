@@ -1,0 +1,107 @@
+#!/bin/bash
+
+cmd=$1
+shift
+script="bin/.action.sh"
+
+RootSrv=/home/ubuntu/RodaSrv 
+
+echo "## do not modify since automatically generated" > $script
+
+case $cmd in
+new)
+    ## répertoires à créer
+    mkdir bin
+    mkdir DockerFiles
+    ##
+    rodaport=9700
+    rodapublic=./RodaPublic
+    rodatools=$HOME/Share/Roda
+    dyndocubuntu=disco
+    while true 
+    do
+        cmd=$1
+        shift
+        case $cmd in
+        --port)
+            rodaport=$1
+            shift
+        ;;
+        -p|--public)
+            rodapublic=$1
+            shift
+        ;;
+        -t|--tools)
+            rodatools=$1
+            shift
+        ;;
+        -u|--ubuntu)
+            dyndocubuntu=$1
+            shift
+        ;;
+        *)
+            break
+        ;;
+        esac
+        cmd=$1
+    done
+    # creating docker-compose.yml
+    txt=`cat template/docker-compose.yml`
+    txt=${txt//RodaSrvPort/$rodaport}
+    txt=${txt//RodaSrvPublic/$rodapublic}
+    txt=${txt//RodaSrvTools/$rodatools}
+    txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
+    echo "$txt" >> "docker-compose.yml"
+    # creating DockerFiles
+    txt=`cat template/Dockerfile-dyndoc`
+    txt=${txt//RodaSrvPort/$rodaport}
+    txt=${txt//RodaSrvPublic/$rodapublic}
+    txt=${txt//RodaSrvTools/$rodatools}
+    txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
+    echo "$txt" >> "DockerFiles/Dockerfile-dyndoc"
+    txt=`cat template/Dockerfile-website`
+    txt=${txt//RodaSrvPort/$rodaport}
+    txt=${txt//RodaSrvPublic/$rodapublic}
+    txt=${txt//RodaSrvTools/$rodatools}
+    txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
+    echo "$txt" >> "DockerFiles/Dockerfile-website"
+    ;;
+init)
+## Create the RodaSrv folder
+echo "mkdir -p /home/ubuntu/RodaSrv/edit" >>  $script
+echo "mkdir -p /home/ubuntu/RodaSrv/public" >>  $script
+echo "mkdir -p /home/ubuntu/RodaSrv/system" >>  $script
+## Config file
+echo "echo '---' > /home/ubuntu/dyndoc/etc/dyn-html.yml" >> $script
+echo "echo 'root: /home/ubuntu/RodaSrv' >> /home/ubuntu/dyndoc/etc/dyn-html.yml" >> $script
+docker-compose exec --user ubuntu website bash /home/ubuntu/bin/.action.sh
+;;
+add)
+# get RodaWebUser from environment variable
+RodaWebUser=$2
+if [ "$RodaWebUser" != "" ]; then
+    echo "mkdir -p ${RootSrv}/edit/${RodaWebUser}" >>  $script 
+    echo "mkdir -p ${RootSrv}/public/pages" >>  $script
+    echo "mkdir -p ${RootSrv}/public/users/${RodaWebUser}/pages/${RodaWebUser}" >>  $script
+    echo "cd ${RootSrv}/public/pages" >>  $script
+    echo "ln -s ../users/${RodaWebUser}/pages/${RodaWebUser} ${RodaWebUser}" >>  $script
+    docker-compose exec --user ubuntu website bash /home/ubuntu/bin/.action.sh
+fi
+;;
+status | start | stop)
+docker-compose exec --user ubuntu website bash -c "/usr/local/bin/dyn-ctl $cmd"
+;;
+bash)
+docker-compose exec --user ubuntu website bash
+;;
+build)
+docker-compose build dyndoc-ruby
+docker-compose build website
+;;
+up)
+docker-compose up -d website
+;;
+down)
+docker-compose down
+;;
+esac

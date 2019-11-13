@@ -1,0 +1,9 @@
+FROM rcqls/dyndoc-ruby
+MAINTAINER "Cqls Team"
+
+USER ubuntu
+
+RUN mkdir -p /home/ubuntu/RodaSrv/public/edit
+RUN mkdir -p /home/ubuntu/RodaSrv/public/users
+
+ENTRYPOINT /usr/local/bin/dyn-ctl start && /bin/bash

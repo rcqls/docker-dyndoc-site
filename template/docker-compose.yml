@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  dyndoc-ruby:
+    build:
+      context: DockerFiles
+      dockerfile: Dockerfile-dyndoc
+    image: rcqls/dyndoc-ruby-DyndocRubyUbuntu
+
+  website:
+    build:
+      context: DockerFiles
+      dockerfile: Dockerfile-website
+    image: rcqls/website-DyndocRubyUbuntu
+    restart: always
+    volumes:
+      - RodaSrvPublic:/home/ubuntu/RodaSrv/public
+      - RodaSrvTools:/home/ubuntu/RodaSrv/.tools
+      - ./bin:/home/ubuntu/bin
+    ports:
+      - RodaSrvPort:9294
+    tty: true
