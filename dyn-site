@@ -16,6 +16,8 @@ new)
     ## 
     rodaport=9700
     rodapublic=../RodaPublic
+    rodadyndoclibrary=../dyndoc-library
+    rodadyndocworld=../dyndoc-world
     rodatools=$HOME/Share/Roda
     dyndocubuntu=disco
     while true 
@@ -39,6 +41,14 @@ new)
             dyndocubuntu=$1
             shift
         ;;
+        -l|--libs)
+            rodadyndoclibrary=$1
+            shift
+        ;;
+        -w|--world)
+            rodadyndocworld=$1
+            shift
+        ;;
         *)
             break
         ;;
@@ -47,6 +57,8 @@ new)
     done
     ## RodaSrvPublic folder volume to mount
     mkdir -p $rodapublic
+    mkdir -p $rodadyndoclibrary
+    mkdir -p $rodadyndocworld
 
     # creating docker-compose.yml
     txt=`cat template/docker-compose.yml`
@@ -54,6 +66,8 @@ new)
     txt=${txt//RodaSrvPublic/$rodapublic}
     txt=${txt//RodaSrvTools/$rodatools}
     txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
+    txt=${txt//RodaSrvDyndocLibrary/$rodadyndoclibrary}
+    txt=${txt//RodaSrvDyndocWorld/$rodadyndocworld}
     echo "$txt" > "docker-compose.yml"
     # creating DockerFiles
     txt=`cat template/Dockerfile-dyndoc`
@@ -61,12 +75,16 @@ new)
     txt=${txt//RodaSrvPublic/$rodapublic}
     txt=${txt//RodaSrvTools/$rodatools}
     txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
+    txt=${txt//RodaSrvDyndocLibrary/$rodadyndoclibrary}
+    txt=${txt//RodaSrvDyndocWorld/$rodadyndocworld}
     echo "$txt" > "DockerFiles/Dockerfile-dyndoc"
     txt=`cat template/Dockerfile-website`
     txt=${txt//RodaSrvPort/$rodaport}
     txt=${txt//RodaSrvPublic/$rodapublic}
     txt=${txt//RodaSrvTools/$rodatools}
     txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
+    txt=${txt//RodaSrvDyndocLibrary/$rodadyndoclibrary}
+    txt=${txt//RodaSrvDyndocWorld/$rodadyndocworld}
     echo "$txt" > "DockerFiles/Dockerfile-website"
     ;;
 init)

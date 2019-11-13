@@ -5,5 +5,7 @@ USER ubuntu
 
 RUN mkdir -p /home/ubuntu/RodaSrv/public/edit
 RUN mkdir -p /home/ubuntu/RodaSrv/public/users
+RUN mkdir -p /home/ubuntu/dyndoc-library
+RUN mkdir -p /home/ubuntu/.dyndoc-world
 
 ENTRYPOINT /usr/local/bin/dyn-ctl start && /bin/bash
