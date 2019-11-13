@@ -54,20 +54,20 @@ new)
     txt=${txt//RodaSrvPublic/$rodapublic}
     txt=${txt//RodaSrvTools/$rodatools}
     txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
-    echo "$txt" >> "docker-compose.yml"
+    echo "$txt" > "docker-compose.yml"
     # creating DockerFiles
     txt=`cat template/Dockerfile-dyndoc`
     txt=${txt//RodaSrvPort/$rodaport}
     txt=${txt//RodaSrvPublic/$rodapublic}
     txt=${txt//RodaSrvTools/$rodatools}
     txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
-    echo "$txt" >> "DockerFiles/Dockerfile-dyndoc"
+    echo "$txt" > "DockerFiles/Dockerfile-dyndoc"
     txt=`cat template/Dockerfile-website`
     txt=${txt//RodaSrvPort/$rodaport}
     txt=${txt//RodaSrvPublic/$rodapublic}
     txt=${txt//RodaSrvTools/$rodatools}
     txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
-    echo "$txt" >> "DockerFiles/Dockerfile-website"
+    echo "$txt" > "DockerFiles/Dockerfile-website"
     ;;
 init)
 

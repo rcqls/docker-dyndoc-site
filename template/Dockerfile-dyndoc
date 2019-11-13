@@ -7,12 +7,20 @@ RUN apt-get update && \
       apt-get -y install sudo
 
 RUN apt-get install -y curl wget locales
+RUN apt-get install -y software-properties-common
 
 RUN locale-gen fr_FR.UTF-8  
 ENV LANG fr_FR.UTF-8  
 ENV LANGUAGE fr_FR:fr  
 ENV LC_ALL fr_FR.UTF-8
 
+ENV DEBIAN_FRONTEND=noninteractive
+
+ENV TZ=Europe/Paris
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        tzdata
+        
 RUN bash -c "$(curl -fs https://cqls.dyndoc.fr/users/RCqls/Dyndoc/install/install-ubuntu16.sh)"
 
 EXPOSE 9294
