@@ -1,4 +1,4 @@
-FROM rcqls/dyndoc-ruby
+FROM rcqls/dyndoc-ruby-DyndocRubyUbuntu
 MAINTAINER "Cqls Team"
 
 USER ubuntu
