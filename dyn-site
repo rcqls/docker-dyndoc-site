@@ -15,7 +15,7 @@ new)
     mkdir DockerFiles
     ## 
     rodaport=9700
-    rodapublic=./RodaPublic
+    rodapublic=../RodaPublic
     rodatools=$HOME/Share/Roda
     dyndocubuntu=disco
     while true 
@@ -45,6 +45,9 @@ new)
         esac
         cmd=$1
     done
+    ## RodaSrvPublic folder volume to mount
+    mkdir -p $rodapublic
+
     # creating docker-compose.yml
     txt=`cat template/docker-compose.yml`
     txt=${txt//RodaSrvPort/$rodaport}
@@ -67,43 +70,44 @@ new)
     echo "$txt" >> "DockerFiles/Dockerfile-website"
     ;;
 init)
-## Create the RodaSrv folder
-echo "mkdir -p /home/ubuntu/RodaSrv/edit" >>  $script
-echo "mkdir -p /home/ubuntu/RodaSrv/public" >>  $script
-echo "mkdir -p /home/ubuntu/RodaSrv/system" >>  $script
-## Config file
-echo "echo '---' > /home/ubuntu/dyndoc/etc/dyn-html.yml" >> $script
-echo "echo 'root: /home/ubuntu/RodaSrv' >> /home/ubuntu/dyndoc/etc/dyn-html.yml" >> $script
-docker-compose exec --user ubuntu website bash /home/ubuntu/bin/.action.sh
-;;
-add)
-# get RodaWebUser from environment variable
-RodaWebUser=$2
-if [ "$RodaWebUser" != "" ]; then
-    echo "mkdir -p ${RootSrv}/edit/${RodaWebUser}" >>  $script 
-    echo "mkdir -p ${RootSrv}/public/pages" >>  $script
-    echo "mkdir -p ${RootSrv}/public/users/${RodaWebUser}/{.pages,.edit}" >>  $script
-    echo "cd ${RootSrv}/public/pages" >>  $script
-    echo "ln -s ../users/${RodaWebUser}/.pages ${RodaWebUser}" >>  $script
-    echo "cd ${RootSrv}/edit" >>  $script
-    echo "ln -s ../public/users/${RodaWebUser}/.edit ${RodaWebUser}" >>  $script
+
+    ## Create the RodaSrv folders inside container
+    echo "mkdir -p /home/ubuntu/RodaSrv/edit" >>  $script
+    echo "mkdir -p /home/ubuntu/RodaSrv/public" >>  $script
+    echo "mkdir -p /home/ubuntu/RodaSrv/system" >>  $script
+    ## Config file
+    echo "echo '---' > /home/ubuntu/dyndoc/etc/dyn-html.yml" >> $script
+    echo "echo 'root: /home/ubuntu/RodaSrv' >> /home/ubuntu/dyndoc/etc/dyn-html.yml" >> $script
     docker-compose exec --user ubuntu website bash /home/ubuntu/bin/.action.sh
-fi
-;;
+    ;;
+add)
+    # get RodaWebUser from environment variable
+    RodaWebUser=$2
+    if [ "$RodaWebUser" != "" ]; then
+        echo "mkdir -p ${RootSrv}/edit/${RodaWebUser}" >>  $script 
+        echo "mkdir -p ${RootSrv}/public/pages" >>  $script
+        echo "mkdir -p ${RootSrv}/public/users/${RodaWebUser}/{.pages,.edit}" >>  $script
+        echo "cd ${RootSrv}/public/pages" >>  $script
+        echo "ln -s ../users/${RodaWebUser}/.pages ${RodaWebUser}" >>  $script
+        echo "cd ${RootSrv}/edit" >>  $script
+        echo "ln -s ../public/users/${RodaWebUser}/.edit ${RodaWebUser}" >>  $script
+        docker-compose exec --user ubuntu website bash /home/ubuntu/bin/.action.sh
+    fi
+    ;;
 status | start | stop)
-docker-compose exec --user ubuntu website bash -c "/usr/local/bin/dyn-ctl $cmd"
-;;
+    docker-compose exec --user ubuntu website bash -c "/usr/local/bin/dyn-ctl $cmd"
+    ;;
 bash)
-docker-compose exec --user ubuntu website bash
-;;
+    docker-compose exec --user ubuntu website bash
+    ;;
 build)
-docker-compose build dyndoc-ruby
-docker-compose build website
-;;
+    docker-compose build dyndoc-ruby
+    docker-compose build website
+    ;;
 up)
-docker-compose up -d website
-;;
+    docker-compose up -d website
+    ;;
 down)
-docker-compose down
-;;
+    docker-compose down
+    ;;
 esac
