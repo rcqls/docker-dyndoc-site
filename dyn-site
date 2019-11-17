@@ -124,7 +124,7 @@ add)
         echo "mkdir -p ${RootSrv}/public/pages" >>  $script
         echo "mkdir -p ${RootSrv}/public/users/${RodaWebUser}/{.pages,.edit}" >>  $script
         echo "cd ${RootSrv}/public/pages" >>  $script
-        echo "ln -s ../users/${RodaWebUser}/.pages ${RodaWebUser}" >>  $script
+        echo "ln -sf ../users/${RodaWebUser}/.pages ${RodaWebUser}" >>  $script
         echo "cd ${RootSrv}/edit" >>  $script
         echo "ln -sf ../public/users/${RodaWebUser}/.edit ${RodaWebUser}" >>  $script
         docker-compose exec --user ubuntu website bash /home/ubuntu/bin/.action.sh
