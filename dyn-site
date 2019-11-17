@@ -15,6 +15,8 @@ new)
     mkdir -p DockerFiles
     ## 
     rodaport=9700
+    rodauid=1000
+    rodagid=1000
     rodapublic=../RodaPublic
     rodadyndoclibrary=../dyndoc-library
     rodadyndocworld=../dyndoc-world
@@ -27,6 +29,14 @@ new)
         case $cmd in
         --port)
             rodaport=$1
+            shift
+        ;;
+        --uid)
+            rodauid=$1
+            shift
+        ;;
+        --gid)
+            rodagid=$1
             shift
         ;;
         -p|--public)
@@ -63,6 +73,8 @@ new)
     # creating docker-compose.yml
     txt=`cat template/docker-compose.yml`
     txt=${txt//RodaSrvPort/$rodaport}
+    txt=${txt//RodaSrvUID/$rodauid}
+    txt=${txt//RodaSrvGID/$rodagid}
     txt=${txt//RodaSrvPublic/$rodapublic}
     txt=${txt//RodaSrvTools/$rodatools}
     txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
@@ -72,6 +84,8 @@ new)
     # creating DockerFiles
     txt=`cat template/Dockerfile-dyndoc`
     txt=${txt//RodaSrvPort/$rodaport}
+    txt=${txt//RodaSrvUID/$rodauid}
+    txt=${txt//RodaSrvGID/$rodagid}
     txt=${txt//RodaSrvPublic/$rodapublic}
     txt=${txt//RodaSrvTools/$rodatools}
     txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
@@ -80,6 +94,8 @@ new)
     echo "$txt" > "DockerFiles/Dockerfile-dyndoc"
     txt=`cat template/Dockerfile-website`
     txt=${txt//RodaSrvPort/$rodaport}
+    txt=${txt//RodaSrvUID/$rodauid}
+    txt=${txt//RodaSrvGID/$rodagid}
     txt=${txt//RodaSrvPublic/$rodapublic}
     txt=${txt//RodaSrvTools/$rodatools}
     txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
