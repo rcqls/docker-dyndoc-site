@@ -129,7 +129,7 @@ add)
         echo "ln -sf ../public/users/${RodaWebUser}/.edit ${RodaWebUser}" >>  $script
         docker-compose exec --user ubuntu website bash /home/ubuntu/bin/.action.sh
     fi
-    if [ "$2" == "--with-rodasrv-dir " ]; then
+    if [ "$2" == "--with-rodasrv-dir" ]; then
         mkdir -p ~/RodaSrv/edit
         RodapublicPath=$(readlink -f "`pwd`/../RodaPublic")
         cd ~/RodaSrv
