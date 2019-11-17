@@ -31,7 +31,9 @@ VOLUME ["/home/ubuntu/bin"]
 
 RUN chown -R ubuntu:ubuntu /home/ubuntu
 
-RUN usermod -u RodaSrvUID -g RodaSrvGID ubuntu
+RUN usermod -u RodaSrvUID ubuntu
+
+RUN groupmod -g RodaSrvGID ubuntu
 
 USER ubuntu
 
