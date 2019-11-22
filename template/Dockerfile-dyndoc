@@ -42,4 +42,4 @@ RUN dyn-init
 RUN dpm install rcqls/DyndocWebTools.dyn
 RUN dpm link rcqls/DyndocWebTools.dyn
 
-RUN export PATH=$PATH:/home/ubuntu/bin
+ENV PATH=$PATH:/home/ubuntu/bin
