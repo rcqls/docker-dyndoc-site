@@ -19,6 +19,7 @@ services:
       - ./bin:/home/ubuntu/bin
       - RodaSrvDyndocLibrary:/home/ubuntu/dyndoc-library
       - RodaSrvDyndocWorld:/home/ubuntu/.dyndoc-world
+      - ../guest-tools:/home/ubuntu/tools
     ports:
       - RodaSrvPort:9294
     tty: true

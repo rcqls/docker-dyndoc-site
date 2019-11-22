@@ -69,6 +69,7 @@ new)
     mkdir -p $rodapublic
     mkdir -p $rodadyndoclibrary
     mkdir -p $rodadyndocworld
+    mkdir -p ../guest-tools
 
     # creating docker-compose.yml
     txt=`cat template/docker-compose.yml`
@@ -81,7 +82,8 @@ new)
     txt=${txt//RodaSrvDyndocLibrary/$rodadyndoclibrary}
     txt=${txt//RodaSrvDyndocWorld/$rodadyndocworld}
     echo "$txt" > "docker-compose.yml"
-    # creating DockerFiles
+    
+    # creating DockerFile-dyndoc
     txt=`cat template/Dockerfile-dyndoc`
     txt=${txt//RodaSrvPort/$rodaport}
     txt=${txt//RodaSrvUID/$rodauid}
@@ -92,6 +94,8 @@ new)
     txt=${txt//RodaSrvDyndocLibrary/$rodadyndoclibrary}
     txt=${txt//RodaSrvDyndocWorld/$rodadyndocworld}
     echo "$txt" > "DockerFiles/Dockerfile-dyndoc"
+    
+    # creating DockerFile-website
     txt=`cat template/Dockerfile-website`
     txt=${txt//RodaSrvPort/$rodaport}
     txt=${txt//RodaSrvUID/$rodauid}
@@ -104,14 +108,13 @@ new)
     echo "$txt" > "DockerFiles/Dockerfile-website"
     ;;
 init)
-
     ## Create the RodaSrv folders inside container
     echo "mkdir -p /home/ubuntu/RodaSrv/edit" >  $script
     echo "mkdir -p /home/ubuntu/RodaSrv/public" >>  $script
     echo "cd /home/ubuntu/RodaSrv"  >>  $script
-    echo "ln -s .tools/system system" >>  $script
+    echo "ln -sf .tools/system system" >>  $script
     echo "cd public"  >>  $script
-    echo "ln -s ../.tools/tools tools" >>  $script
+    echo "ln -sf ../.tools/tools tools" >>  $script
     ## Config file
     echo "echo '---' > /home/ubuntu/dyndoc/etc/dyn-html.yml" >> $script
     echo "echo 'root: /home/ubuntu/RodaSrv' >> /home/ubuntu/dyndoc/etc/dyn-html.yml" >> $script
@@ -153,5 +156,18 @@ up)
     ;;
 down)
     docker-compose down
+    ;;
+pause)
+    docker-compose pause
+    ;;
+unpause)
+    docker-compose unpause
+    ;;
+install-julia)
+    echo "mkdir -p /home/ubuntu/install" > $script
+    echo "cd /home/ubuntu/install" >> $script
+    echo "wget https://julialang-s3.julialang.org/bin/linux/x64/$1/julia-$1.$2-linux-x86_64.tar.gz | tar xzvf" >> $script
+    echo "ln -sf /home/ubuntu/install/julia-$1/bin/julia /home/ubuntu/bin/julia" >> $script
+    docker-compose exec --user ubuntu website bash /home/ubuntu/bin/.action.sh
     ;;
 esac
