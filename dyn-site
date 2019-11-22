@@ -164,10 +164,13 @@ unpause)
     docker-compose unpause
     ;;
 install-julia)
+    jl=$1
+    extra=$2
+    if [ $extra = "" ]; then extra="0"; fi
     echo "mkdir -p /home/ubuntu/install" > $script
     echo "cd /home/ubuntu/install" >> $script
-    echo "wget https://julialang-s3.julialang.org/bin/linux/x64/$1/julia-$1.$2-linux-x86_64.tar.gz | tar xzvf" >> $script
-    echo "ln -sf /home/ubuntu/install/julia-$1/bin/julia /home/ubuntu/bin/julia" >> $script
+    echo "wget https://julialang-s3.julialang.org/bin/linux/x64/$jl/julia-$jl.$extra-linux-x86_64.tar.gz | tar xzvf" >> $script
+    echo "ln -sf /home/ubuntu/install/julia-$jl/bin/julia /home/ubuntu/bin/julia" >> $script
     docker-compose exec --user ubuntu website bash /home/ubuntu/bin/.action.sh
     ;;
 esac
