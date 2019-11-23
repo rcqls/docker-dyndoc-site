@@ -145,7 +145,11 @@ status | start | stop)
     docker-compose exec --user ubuntu website bash -c "/usr/local/bin/dyn-ctl $cmd"
     ;;
 bash)
-    docker-compose exec --user ubuntu website bash
+    user=ubuntu
+    if [ "$1" = "--user-root" ];then
+        user=root
+    fi
+    docker-compose exec --user $user website bash
     ;;
 build)
     docker-compose build dyndoc-ruby
@@ -166,7 +170,9 @@ unpause)
 install-julia)
     jl=$1
     extra=$2
-    if [ $extra = "" ]; then extra="0"; fi
+    if [ "$extra" = "" ];then 
+        extra="0"
+    fi
     echo "mkdir -p /home/ubuntu/install" > $script
     echo "cd /home/ubuntu/install" >> $script
     echo "wget https://julialang-s3.julialang.org/bin/linux/x64/$jl/julia-$jl.$extra-linux-x86_64.tar.gz | tar xzvf" >> $script
