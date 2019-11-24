@@ -14,10 +14,18 @@ links-guest-user() {
 install-dyndoc-guest-user() {
 	if ! [[ -L /home/ubuntu/dyndoc && -d /home/ubuntu/dyndoc ]]; then
 		cd /home/ubuntu
-		mv dyndoc tools/
+		if [ -d tools/dyndoc ]; then
+			if [ -d dyndoc ]; then
+				rm -fr dyndoc
+			fi
+		else
+			mv dyndoc tools/
+		fi
 		ln -sf tools/dyndoc dyndoc
-		dpm install rcqls/DyndocWebTools.dyn
-		dpm link rcqls/DyndocWebTools.dyn
+		if ! [ -d tools/dyndoc/library/DyndocWebTools.dyn ]; then
+			dpm install rcqls/DyndocWebTools.dyn
+			dpm link rcqls/DyndocWebTools.dyn
+		fi
 	fi
 }
 
