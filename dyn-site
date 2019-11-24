@@ -73,7 +73,7 @@ new)
     mkdir -p $rodadyndoclibrary
     mkdir -p $rodadyndocworld
     mkdir -p ../guest-tools/bin
-    cp scripts/install.sh ../guest-tools/bin/.install.sh
+    cp scripts/guest-install.sh ../guest-tools/bin/.install.sh
 
     # creating docker-compose.yml
     txt=`cat template/docker-compose.yml`
@@ -175,5 +175,9 @@ install-*-user)
     echo ". /home/ubuntu/tools/bin/.install.sh" >> $script
     echo "${cmd} $*" >> $script
     docker-compose exec --user ubuntu website bash ${guest_script}
+    ;;
+install-*-host)
+    . scripts/host-install.sh
+    ${cmd} $*
     ;;
 esac
