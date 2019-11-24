@@ -3,6 +3,7 @@ export-rubylib-guest-user() {
 }
 
 ln-bashrc-guest-user() {
+	mkdir -p /home/ubuntu/tools/etc
 	cd /home/ubuntu
 	ln -s tools/etc/bashrc .bashrc
 }
@@ -17,24 +18,24 @@ install-dyndoc-guest-user() {
 	fi
 }
 
-install-julia-guest-user() {
-	jl=$1
-	extra=$2
-	if [ "$extra" = "" ];then 
-		extra="0"
-	fi
-	juliabin=julia-${jl}.${extra}
-	juliatgz=${juliabin}-linux-x86_64.tar.gz
+# install-julia-guest-user() {
+# 	jl=$1
+# 	extra=$2
+# 	if [ "$extra" = "" ];then 
+# 		extra="0"
+# 	fi
+# 	juliabin=julia-${jl}.${extra}
+# 	juliatgz=${juliabin}-linux-x86_64.tar.gz
 
-	mkdir -p /home/ubuntu/tools/install/src
-	cd /home/ubuntu/tools/install/src
+# 	mkdir -p /home/ubuntu/tools/install/src
+# 	cd /home/ubuntu/tools/install/src
 
-	if ! [ -f  "${juliatgz}" ]; then
- 		wget https://julialang-s3.julialang.org/bin/linux/x64/$jl/${juliatgz}
-		cd ..
-		tar xzvf src/${juliatgz}
-	fi
+# 	if ! [ -f  "${juliatgz}" ]; then
+#  		wget https://julialang-s3.julialang.org/bin/linux/x64/$jl/${juliatgz}
+# 		cd ..
+# 		tar xzvf src/${juliatgz}
+# 	fi
 
-	cd /home/ubuntu/tools/bin 
-	ln -sf ../install/${juliabin}/bin/julia julia
-}
+# 	cd /home/ubuntu/tools/bin 
+# 	ln -sf ../install/${juliabin}/bin/julia julia
+# }
