@@ -1,17 +1,17 @@
-export-rubylib-guest-user() {
+export-rubylib-user() {
 	mkdir -p /home/ubuntu/tools/etc
 	script=/home/ubuntu/tools/etc/bashrc
 	echo "export JULIA_RUBYLIB_PATH=$(/usr/bin/env ruby -e 'puts Dir[RbConfig::CONFIG["libdir"]+"/**/libruby*"].select{|e| e =~ /\.so$/}[0]')" >> $script
 }
 
-links-guest-user() {
+links-user() {
 	mkdir -p /home/ubuntu/tools/etc
 	cd /home/ubuntu
 	ln -sf tools/etc/bashrc .bashrc
 	ln -sf tools/etc/dyndoc.yml .dyndoc.yml
 }
 
-install-dyndoc-guest-user() {
+install-dyndoc-user() {
 	if ! [[ -L /home/ubuntu/dyndoc && -d /home/ubuntu/dyndoc ]]; then
 		cd /home/ubuntu
 		if [ -d tools/dyndoc ]; then
