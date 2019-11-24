@@ -9,14 +9,18 @@ install-julia-host() {
 	juliatgz=${juliabin}-linux-x86_64.tar.gz
 
 	mkdir -p ${guestdir}/install/src
-	cd ${guestdir}/install/src
+	cd ${guestdir}/install
 
-	if ! [ -f  "${juliatgz}" ]; then
+	if ! [ -f  "src/${juliatgz}" ]; then
+		cd src
  		wget https://julialang-s3.julialang.org/bin/linux/x64/$jl/${juliatgz}
 		cd ..
-		tar xzvf src/${juliatgz}
-		echo "JULIA_RUBYLIB_PATH=$(/usr/bin/env ruby -e 'puts Dir[RbConfig::CONFIG["libdir"]+"/**/libruby*"].select{|e| e =~ /\.so$/}[0]')" >> ~/.bashrc
 	fi
+	
+	if [ -d "${juliabin}" ]; then 
+		rm -fr  ${juliabin}
+	fi
+	tar xzvf src/${juliatgz}
 
 	cd ${guestdir}/bin 
 	ln -sf ../install/${juliabin}/bin/julia julia
