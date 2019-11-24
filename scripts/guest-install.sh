@@ -2,9 +2,9 @@ export-rubylib-guest-user() {
 	echo "export JULIA_RUBYLIB_PATH=$(/usr/bin/env ruby -e 'puts Dir[RbConfig::CONFIG["libdir"]+"/**/libruby*"].select{|e| e =~ /\.so$/}[0]')"
 }
 
-bashrc-guest-user() {
+ln-bashrc-guest-user() {
 	cd /home/ubuntu
-	ln -s ../tools/etc/bashrc .bashrc
+	ln -s tools/etc/bashrc .bashrc
 }
 
 install-julia-guest-user() {
