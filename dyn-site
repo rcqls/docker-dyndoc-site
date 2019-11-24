@@ -6,7 +6,9 @@ script="../guest-tools/bin/.action.sh"
 
 RootSrv=/home/ubuntu/RodaSrv 
 
-echo "## do not modify since automatically generated" > $script
+if [ -f "$script" ]; then
+    echo "## do not modify since automatically generated" > $script
+fi
 
 case $cmd in
 new)
