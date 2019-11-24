@@ -3,6 +3,7 @@
 cmd=$1
 shift
 script="../guest-tools/bin/.action.sh"
+guest_script="/home/ubuntu/tools/bin/.action.sh"
 
 RootSrv=/home/ubuntu/RodaSrv 
 
@@ -121,7 +122,7 @@ init)
     ## Config file
     echo "echo '---' > /home/ubuntu/dyndoc/etc/dyn-html.yml" >> $script
     echo "echo 'root: /home/ubuntu/RodaSrv' >> /home/ubuntu/dyndoc/etc/dyn-html.yml" >> $script
-    docker-compose exec --user ubuntu website bash /home/ubuntu/bin/.action.sh
+    docker-compose exec --user ubuntu website bash ${guest_script}
     ;;
 add)
     # get RodaWebUser from environment variable
@@ -133,7 +134,7 @@ add)
         echo "ln -sf ../users/${RodaWebUser}/.pages ${RodaWebUser}" >>  $script
         echo "cd ${RootSrv}/edit" >>  $script
         echo "ln -sf ../public/users/${RodaWebUser}/.edit ${RodaWebUser}" >>  $script
-        docker-compose exec --user ubuntu website bash /home/ubuntu/bin/.action.sh
+        docker-compose exec --user ubuntu website bash ${guest_script}
     fi
     if [ "$2" == "--with-rodasrv-dir" ]; then
         mkdir -p ~/RodaSrv/edit
@@ -173,6 +174,6 @@ unpause)
 install-*-user)
     echo ". /home/ubuntu/tools/bin/.install.sh" >> $script
     echo "${cmd} $*" >> $script
-    docker-compose exec --user ubuntu website bash /home/ubuntu/tools/bin/.action.sh
+    docker-compose exec --user ubuntu website bash ${guest_script}
     ;;
 esac
