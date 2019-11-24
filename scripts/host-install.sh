@@ -40,7 +40,7 @@ etc-dyn-html-host() {
 	guestdir=$(pwd)/../guest-tools
 	script=${guestdir}/dyndoc/etc/dyn-html.yml
 	echo "---" > $script
-	echo "root: /Users/rcqls/RodaSrv" >> $script
+	echo "root: /home/ubuntu/RodaSrv" >> $script
 }
 
 dyndoc-yml-host() {
