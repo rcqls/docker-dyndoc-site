@@ -185,4 +185,8 @@ unpause)
     . scripts/host-install.sh
     ${cmd} $*
     ;;
+gem)
+    echo "gem $*" >> $script
+    docker-compose exec --user root website bash ${guest_script}
+    ;;
 esac

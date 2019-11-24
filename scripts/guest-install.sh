@@ -42,7 +42,3 @@ install-dyndoc-guest-user() {
 # 	cd /home/ubuntu/tools/bin 
 # 	ln -sf ../install/${juliabin}/bin/julia julia
 # }
-
-gem-jl4rb-guest-root() {
-	gem install jl4rb
-}
