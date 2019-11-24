@@ -7,6 +7,16 @@ ln-bashrc-guest-user() {
 	ln -s tools/etc/bashrc .bashrc
 }
 
+install-dyndoc-guest-user() {
+	if ! [ -d /home/ubuntu/tools/dyndoc ]; then
+		cd /home/ubuntu
+		mv dyndoc tools/
+		ln -sf tools/dyndoc dyndoc
+		dpm install rcqls/DyndocWebTools.dyn
+		dpm link rcqls/DyndocWebTools.dyn
+	]
+}
+
 install-julia-guest-user() {
 	jl=$1
 	extra=$2
