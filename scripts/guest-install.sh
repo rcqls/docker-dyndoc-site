@@ -1,5 +1,5 @@
-find-guest-user() {
-	echo "echo $(/usr/bin/env ruby -e 'puts Dir[RbConfig::CONFIG["libdir"]+"/**/libruby*"].select{|e| e =~ /\.so$/}[0]')"
+export-rubylib-guest-user() {
+	echo "export JULIA_RUBYLIB_PATH=$(/usr/bin/env ruby -e 'puts Dir[RbConfig::CONFIG["libdir"]+"/**/libruby*"].select{|e| e =~ /\.so$/}[0]')"
 }
 
 bashrc-guest-user() {
