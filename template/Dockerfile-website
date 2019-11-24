@@ -8,6 +8,9 @@ RUN mkdir -p /home/ubuntu/RodaSrv/public/users
 RUN mkdir -p /home/ubuntu/dyndoc-library
 RUN mkdir -p /home/ubuntu/.dyndoc-world
 RUN mkdir -p /home/ubuntu/tools/bin
+RUN mkdir -p /home/ubuntu/tools/dyndoc
+
+RUN ln -sf /home/ubuntu/tools/dyndoc dyndoc
 
 ENV PATH=$PATH:/home/ubuntu/tools/bin
 
