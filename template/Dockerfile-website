@@ -14,5 +14,9 @@ RUN ln -sf /home/ubuntu/tools/dyndoc dyndoc
 
 ENV PATH=$PATH:/home/ubuntu/tools/bin
 
+RUN dyn-init
+
+RUN dpm install rcqls/DyndocWebTools.dyn
+RUN dpm link rcqls/DyndocWebTools.dyn
 
 ENTRYPOINT /usr/local/bin/dyn-ctl start && /bin/bash

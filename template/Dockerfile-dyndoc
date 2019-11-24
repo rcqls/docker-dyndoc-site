@@ -37,7 +37,3 @@ RUN groupmod -g RodaSrvGID ubuntu
 
 USER ubuntu
 
-RUN dyn-init
-
-RUN dpm install rcqls/DyndocWebTools.dyn
-RUN dpm link rcqls/DyndocWebTools.dyn
