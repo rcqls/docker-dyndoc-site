@@ -34,3 +34,11 @@ install-julia-host() {
 	cd ..
 	cp install/dyndoc-syntax/ultraviolet/syntax/julia.syntax dyndoc/etc/uv/syntax/
 }
+
+dyndoc-yml-host() {
+	guestdir=$(pwd)/../guest-tools
+	script=${guestdir}/etc/dyndoc.yml
+	echo "---" > $script
+	echo "cfg_dyn:" >> $script
+  	echo "  langs: R,jl" >> $script
+}
