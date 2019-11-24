@@ -30,7 +30,9 @@ install-julia-host() {
 	if ! [ -d dyndoc-syntax ]; then
 		git clone https://github.com/rcqls/dyndoc-syntax
 	else
+		cd dyndoc-syntax
 		git pull
+		cd ..
 	fi
 	cd ..
 	cp install/dyndoc-syntax/ultraviolet/syntax/julia.syntax dyndoc/etc/uv/syntax/
