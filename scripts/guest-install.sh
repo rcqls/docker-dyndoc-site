@@ -1,4 +1,13 @@
-install-julia-user() {
+find-guest-user() {
+	echo "echo $(/usr/bin/env ruby -e 'puts Dir[RbConfig::CONFIG["libdir"]+"/**/libruby*"].select{|e| e =~ /\.so$/}[0]')"
+}
+
+bashrc-guest-user() {
+	cd /home/ubuntu
+	ln -s ../tools/etc/bashrc .bashrc
+}
+
+install-julia-guest-user() {
 	jl=$1
 	extra=$2
 	if [ "$extra" = "" ];then 
@@ -14,7 +23,6 @@ install-julia-user() {
  		wget https://julialang-s3.julialang.org/bin/linux/x64/$jl/${juliatgz}
 		cd ..
 		tar xzvf src/${juliatgz}
-		echo "JULIA_RUBYLIB_PATH=$(/usr/bin/env ruby -e 'puts Dir[RbConfig::CONFIG["libdir"]+"/**/libruby*"].select{|e| e =~ /\.so$/}[0]')" >> ~/.bashrc
 	fi
 
 	cd /home/ubuntu/tools/bin 

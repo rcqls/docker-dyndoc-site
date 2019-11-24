@@ -1,3 +1,9 @@
+install-bashrc-host() {
+	guestdir=$(pwd)/../guest-tools
+	mkdir -p ${guestdir}/etc
+	
+}
+
 install-julia-host() {
 	guestdir=$(pwd)/../guest-tools
 	jl=$1
@@ -16,7 +22,7 @@ install-julia-host() {
  		wget https://julialang-s3.julialang.org/bin/linux/x64/$jl/${juliatgz}
 		cd ..
 	fi
-	
+
 	if [ -d "${juliabin}" ]; then 
 		rm -fr  ${juliabin}
 	fi

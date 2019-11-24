@@ -171,12 +171,17 @@ pause)
 unpause)
     docker-compose unpause
     ;;
-install-*-user)
+*-guest-user)
     echo ". /home/ubuntu/tools/bin/.install.sh" >> $script
     echo "${cmd} $*" >> $script
     docker-compose exec --user ubuntu website bash ${guest_script}
     ;;
-install-*-host)
+*-guest-root)
+    echo ". /home/ubuntu/tools/bin/.install.sh" >> $script
+    echo "${cmd} $*" >> $script
+    docker-compose exec --user root website bash ${guest_script}
+    ;;
+*-host)
     . scripts/host-install.sh
     ${cmd} $*
     ;;
