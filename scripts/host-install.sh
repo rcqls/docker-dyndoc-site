@@ -20,7 +20,7 @@ install-julia-host() {
 	if [ -d "${juliabin}" ]; then 
 		rm -fr  ${juliabin}
 	fi
-	
+
 	tar xzvf src/${juliatgz}
 
 	cd ${guestdir}/bin 
@@ -34,6 +34,13 @@ install-julia-host() {
 	fi
 	cd ..
 	cp install/dyndoc-syntax/ultraviolet/syntax/julia.syntax dyndoc/etc/uv/syntax/
+}
+
+etc-dyn-html-host() {
+	guestdir=$(pwd)/../guest-tools
+	script=${guestdir}/dyndoc/etc/dyn-html.yml
+	echo "---" > $script
+	echo "root: /Users/rcqls/RodaSrv" >> $script
 }
 
 dyndoc-yml-host() {
