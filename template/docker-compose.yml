@@ -16,7 +16,6 @@ services:
     volumes:
       - RodaSrvPublic:/home/ubuntu/RodaSrv/public
       - RodaSrvTools:/home/ubuntu/RodaSrv/.tools
-      - ./bin:/home/ubuntu/bin
       - RodaSrvDyndocLibrary:/home/ubuntu/dyndoc-library
       - RodaSrvDyndocWorld:/home/ubuntu/.dyndoc-world
       - ../guest-tools:/home/ubuntu/tools

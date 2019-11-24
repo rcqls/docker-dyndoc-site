@@ -2,7 +2,7 @@
 
 cmd=$1
 shift
-script="bin/.action.sh"
+script="../guest-tools/bin/.action.sh"
 
 RootSrv=/home/ubuntu/RodaSrv 
 
@@ -69,7 +69,8 @@ new)
     mkdir -p $rodapublic
     mkdir -p $rodadyndoclibrary
     mkdir -p $rodadyndocworld
-    mkdir -p ../guest-tools
+    mkdir -p ../guest-tools/bin
+    cp scripts/install.sh ../guest-tools/bin/.install.sh
 
     # creating docker-compose.yml
     txt=`cat template/docker-compose.yml`
@@ -167,17 +168,9 @@ pause)
 unpause)
     docker-compose unpause
     ;;
-install-julia)
-    jl=$1
-    extra=$2
-    if [ "$extra" = "" ];then 
-        extra="0"
-    fi
-    echo "mkdir -p /home/ubuntu/install" > $script
-    echo "cd /home/ubuntu/install" >> $script
-    echo "wget https://julialang-s3.julialang.org/bin/linux/x64/$jl/julia-$jl.$extra-linux-x86_64.tar.gz | tar xzvf" >> $script
-    echo "tar xzvf julia-$jl.$extra-linux-x86_64.tar.gz" >> $script
-    echo "ln -sf /home/ubuntu/install/julia-$jl.$extra/bin/julia /home/ubuntu/bin/julia" >> $script
-    docker-compose exec --user ubuntu website bash /home/ubuntu/bin/.action.sh
+install-*-user)
+    echo ". /home/ubuntu/tools/bin/.install.sh" >> $script
+    echo "${cmd} $*" >> $script
+    docker-compose exec --user ubuntu website bash /home/ubuntu/tools/bin/.action.sh
     ;;
 esac

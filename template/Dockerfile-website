@@ -7,7 +7,9 @@ RUN mkdir -p /home/ubuntu/RodaSrv/public/edit
 RUN mkdir -p /home/ubuntu/RodaSrv/public/users
 RUN mkdir -p /home/ubuntu/dyndoc-library
 RUN mkdir -p /home/ubuntu/.dyndoc-world
-RUN mkdir -p /home/ubuntu/tools
+RUN mkdir -p /home/ubuntu/tools/bin
+
+ENV PATH=$PATH:/home/ubuntu/tools/bin
 
 
 ENTRYPOINT /usr/local/bin/dyn-ctl start && /bin/bash
