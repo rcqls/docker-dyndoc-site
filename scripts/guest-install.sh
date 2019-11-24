@@ -12,7 +12,7 @@ links-guest-user() {
 }
 
 install-dyndoc-guest-user() {
-	if ! [ -d /home/ubuntu/tools/dyndoc ]; then
+	if ! [[ -L /home/ubuntu/dyndoc && -d /home/ubuntu/dyndoc ]]; then
 		cd /home/ubuntu
 		mv dyndoc tools/
 		ln -sf tools/dyndoc dyndoc

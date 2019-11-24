@@ -20,6 +20,7 @@ install-julia-host() {
 	if [ -d "${juliabin}" ]; then 
 		rm -fr  ${juliabin}
 	fi
+	
 	tar xzvf src/${juliatgz}
 
 	cd ${guestdir}/bin 
