@@ -189,6 +189,10 @@ gem)
     echo "gem $*" >> $script
     docker-compose exec --user root website bash ${guest_script}
     ;;
+rb-pkg)
+    echo "gem install $*" >> $script
+    docker-compose exec --user root website bash ${guest_script}
+    ;;
 R-pkg)
     echo "R -e \"install.packages('${1}',repos='http://cran.rstudio.com/')\"" >> $script
     docker-compose exec --user root website bash ${guest_script}
