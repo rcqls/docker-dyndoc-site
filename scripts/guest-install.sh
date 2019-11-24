@@ -14,7 +14,7 @@ install-dyndoc-guest-user() {
 		ln -sf tools/dyndoc dyndoc
 		dpm install rcqls/DyndocWebTools.dyn
 		dpm link rcqls/DyndocWebTools.dyn
-	]
+	fi
 }
 
 install-julia-guest-user() {
