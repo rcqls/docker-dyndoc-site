@@ -22,10 +22,6 @@ install-dyndoc-user() {
 			mv dyndoc tools/
 		fi
 		ln -sf tools/dyndoc dyndoc
-		if ! [ -d tools/dyndoc/library/DyndocWebTools.dyn ]; then
-			dpm install rcqls/DyndocWebTools.dyn
-			dpm link rcqls/DyndocWebTools.dyn
-		fi
 	fi
 }
 

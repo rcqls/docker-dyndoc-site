@@ -186,19 +186,28 @@ unpause)
     ${cmd} $*
     ;;
 gem)
-    echo "gem $*" >> $script
+    echo "gem $*" > $script
     docker-compose exec --user root website bash ${guest_script}
     ;;
 rb-pkg)
-    echo "gem install $*" >> $script
+    echo "gem install $*" > $script
     docker-compose exec --user root website bash ${guest_script}
     ;;
 R-pkg)
-    echo "R -e \"install.packages('${1}',repos='http://cran.rstudio.com/')\"" >> $script
+    echo "R -e \"install.packages('${1}',repos='http://cran.rstudio.com/')\"" > $script
     docker-compose exec --user root website bash ${guest_script}
     ;;
 jl-pkg)
-    echo "julia -e 'import Pkg;Pkg.add(\"${1}\")'" >> $script
+    echo "julia -e 'import Pkg;Pkg.add(\"${1}\")'" > $script
+    docker-compose exec --user root website bash ${guest_script}
+    ;;
+dpm)
+    user=$1
+    pkg=$2
+    echo "if ! [ -d /home/ubuntu/tools/dyndoc/library/${pkg}.dyn ]; then" > $script
+	echo "	dpm install ${user}/${pkg}.dyn" >> $script
+	echo "	dpm link ${user}/${pkg}.dyn" >> $script
+	echo "fi" >> $script
     docker-compose exec --user root website bash ${guest_script}
     ;;
 esac
