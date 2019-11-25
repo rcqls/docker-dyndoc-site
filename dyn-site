@@ -201,7 +201,7 @@ jl-pkg)
     echo "julia -e 'import Pkg;Pkg.add(\"${1}\")'" > $script
     docker-compose exec --user root website bash ${guest_script}
     ;;
-dpm)
+dpm | dyn-pkg | pkg)
     user=$1
     pkg=$2
     echo "if ! [ -d /home/ubuntu/tools/dyndoc/library/${pkg}.dyn ]; then" > $script
