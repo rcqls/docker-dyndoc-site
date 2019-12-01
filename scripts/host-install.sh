@@ -65,5 +65,6 @@ dyndoc-notify-host() {
 		script=${userdir}/dyndoc-notify/read
 		echo "#!/bin/bash" > $script
 		echo "noti -t 'dyndoc server' -m \$(cat ../.edit/notify.out)" >> $script
+		chmod u+x $script
 	fi
 }
