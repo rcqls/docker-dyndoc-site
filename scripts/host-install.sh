@@ -52,3 +52,18 @@ dyndoc-yml-julia-host() {
 	echo "cfg_dyn:" >> $script
   	echo "  langs: R,jl" >> $script
 }
+
+dyndoc-notify-host() {
+	USER=$1
+	if [ "$USER" != "" ]; then
+		userdir=$(pwd)/RodaPublic/users/${USER}
+		mkdir -p ${userdir}/dyndoc-notify
+		script=${userdir}/dyndoc-notify/run
+		echo "#!/bin/bash" > $script
+		echo "watchexec --exts out -w ../.edit -r  ./read" >> $script
+		chmod u+x $script
+		script=${userdir}/dyndoc-notify/read
+		echo "#!/bin/bash" > $script
+		echo "noti -t 'dyndoc server' -m $(cat ../.edit/notify.out)" >> $script
+	fi
+}
