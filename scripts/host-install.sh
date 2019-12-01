@@ -54,9 +54,9 @@ dyndoc-yml-julia-host() {
 }
 
 dyndoc-notify-host() {
-	USER=$1
-	if [ "$USER" != "" ]; then
-		userdir=$(pwd)/RodaPublic/users/${USER}
+	RODAUSER=$1
+	if [ "$RODAUSER" != "" ]; then
+		userdir=$(pwd)/../RodaPublic/users/${RODAUSER}
 		mkdir -p ${userdir}/dyndoc-notify
 		script=${userdir}/dyndoc-notify/run
 		echo "#!/bin/bash" > $script
