@@ -60,6 +60,7 @@ dyndoc-notify-host() {
 		mkdir -p ${userdir}/dyndoc-notify
 		script=${userdir}/dyndoc-notify/run
 		echo "#!/bin/bash" > $script
+		echo "cd \$(dirname \$0)" >> $script
 		echo "watchexec --exts out -w ../.edit -r  ./read" >> $script
 		chmod u+x $script
 		script=${userdir}/dyndoc-notify/read
