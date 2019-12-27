@@ -33,5 +33,5 @@ services:
     ports:
       - "RodaSrvMongoPort:27017"
     volumes:
-      - RodaSrvDir/data/db:/data/db
-      - RodaSrvDir/data/configdb:/data/configdb
+      - RodaSrvMongoDir/data/db:/data/db
+      - RodaSrvMongoDir/data/configdb:/data/configdb
