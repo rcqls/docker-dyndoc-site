@@ -22,3 +22,16 @@ services:
     ports:
       - RodaSrvPort:9294
     tty: true
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+        # provide your credentials here
+        - MONGO_INITDB_ROOT_USERNAME=RodaSrvMongoUser
+        - MONGO_INITDB_ROOT_PASSWORD=RodaSrvMongoPwd
+    ports:
+      - "RodaSrvMongoPort:27017"
+    volumes:
+      - RodaSrvDir/data/db:/data/db
+      - RodaSrvDir/data/configdb:/data/configdb

@@ -24,6 +24,10 @@ new)
     rodadyndoclibrary=../dyndoc-library
     rodadyndocworld=../dyndoc-world
     rodatools=$HOME/Share/Roda
+    rodamongouser=mongo
+    rodamongopwd=lol2mongo
+    rodamongoport=27017
+    rodamongodir=../dyndoc-mongo
     dyndocubuntu=disco
     while true 
     do
@@ -62,6 +66,22 @@ new)
             rodadyndocworld=$1
             shift
         ;;
+        --mongo-user)
+            rodamongouser=$1
+            shift
+        ;;
+        --mongo-pwd)
+            rodamongopwd=$1
+            shift
+        ;;
+        --mongo-port)
+            rodamongoport=$1
+            shift
+        ;;
+        --mongo-dir)
+            rodamongodir=$1
+            shift
+        ;;
         *)
             break
         ;;
@@ -72,6 +92,8 @@ new)
     mkdir -p $rodapublic
     mkdir -p $rodadyndoclibrary
     mkdir -p $rodadyndocworld
+    mkdir -p $rodamongodir/data/db
+    mkdir -p $rodamongodir/data/configdb
     mkdir -p ../guest-tools/bin
     cp scripts/guest-install.sh ../guest-tools/bin/.install.sh
 
@@ -85,6 +107,10 @@ new)
     txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
     txt=${txt//RodaSrvDyndocLibrary/$rodadyndoclibrary}
     txt=${txt//RodaSrvDyndocWorld/$rodadyndocworld}
+    txt=${txt//RodaSrvMongoUser/$rodamongouser}
+    txt=${txt//RodaSrvMongoPwd/$rodamongopwd}
+    txt=${txt//RodaSrvMongoPort/$rodamongoport}
+    txt=${txt//RodaSrvMongoDir/$rodamongodir}
     echo "$txt" > "docker-compose.yml"
     
     # creating DockerFile-dyndoc
@@ -209,5 +235,14 @@ dpm | dyn-pkg | pkg)
 	echo "	dpm link ${user}/${pkg}.dyn" >> $script
 	echo "fi" >> $script
     docker-compose exec --user root website bash ${guest_script}
+    ;;
+mongo-up)
+    docker-compose up -d mongo
+    ;;
+mongo-down)
+    docker-compose down mongo
+    ;;
+mongo)
+    docker-compose $* mongo
     ;;
 esac
