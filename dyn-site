@@ -26,7 +26,7 @@ new)
     rodatools=$HOME/Share/Roda
     rodamongouser=mongo
     rodamongopwd=lol2mongo
-    rodamongoport=27017
+    rodamongoport=27018
     rodamongodir=../dyndoc-mongo
     dyndocubuntu=disco
     while true 
