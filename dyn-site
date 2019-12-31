@@ -245,4 +245,13 @@ mongo-down)
 mongo)
     docker-compose $* mongo
     ;;
+mongo-express-up)
+    docker-compose up -d mongo-express
+    ;;
+mongo-express-down)
+    docker-compose down mongo-express
+    ;;
+mongo-express)
+    docker-compose $* mongo-express
+    ;;
 esac
