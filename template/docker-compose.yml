@@ -1,28 +1,6 @@
 version: '2'
 
 services:
-  dyndoc-ruby:
-    build:
-      context: DockerFiles
-      dockerfile: Dockerfile-dyndoc
-    image: rcqls/dyndoc-ruby-DyndocRubyUbuntu
-
-  website:
-    build:
-      context: DockerFiles
-      dockerfile: Dockerfile-website
-    image: rcqls/website-DyndocRubyUbuntu
-    restart: always
-    volumes:
-      - RodaSrvPublic:/home/ubuntu/RodaSrv/public
-      - RodaSrvTools:/home/ubuntu/RodaSrv/.tools
-      - RodaSrvDyndocLibrary:/home/ubuntu/dyndoc-library
-      - RodaSrvDyndocWorld:/home/ubuntu/.dyndoc-world
-      - ../guest-tools:/home/ubuntu/tools
-    ports:
-      - RodaSrvPort:9294
-    tty: true
-
   mongo:
     image: mongo
     restart: always
@@ -44,3 +22,25 @@ services:
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=RodaSrvMongoUser
       - ME_CONFIG_MONGODB_ADMINPASSWORD=RodaSrvMongoPwd
+
+  dyndoc-ruby:
+    build:
+      context: DockerFiles
+      dockerfile: Dockerfile-dyndoc
+    image: rcqls/dyndoc-ruby-DyndocRubyUbuntu
+
+  website:
+    build:
+      context: DockerFiles
+      dockerfile: Dockerfile-website
+    image: rcqls/website-DyndocRubyUbuntu
+    restart: always
+    volumes:
+      - RodaSrvPublic:/home/ubuntu/RodaSrv/public
+      - RodaSrvTools:/home/ubuntu/RodaSrv/.tools
+      - RodaSrvDyndocLibrary:/home/ubuntu/dyndoc-library
+      - RodaSrvDyndocWorld:/home/ubuntu/.dyndoc-world
+      - ../guest-tools:/home/ubuntu/tools
+    ports:
+      - RodaSrvPort:9294
+    tty: true
