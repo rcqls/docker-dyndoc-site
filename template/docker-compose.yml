@@ -44,3 +44,6 @@ services:
     ports:
       - RodaSrvPort:9294
     tty: true
+    depends_on:
+      - mongo
+      - mongo-express
