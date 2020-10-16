@@ -1,13 +1,48 @@
 FROM ubuntu:DyndocRubyUbuntu
 MAINTAINER "Cqls Team"
 
-RUN groupadd -r ubuntu && useradd -r -g ubuntu ubuntu
+################################
+## All needed with apt
+################################
+RUN apt-get update -qq && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    apt-transport-https \
+    curl \
+    fontconfig \
+    libxml2-dev  libcurl4-openssl-dev libssl-dev \
+    sudo apt-get install -y libxml2-dev libssl-dev
+    locales \
+    perl \
+    sudo \
+    tzdata \
+    wget \ 
+    git \ 
+    ruby ruby-dev libruby
 
-RUN apt-get update && \
-      apt-get -y install sudo
+## R (copied from r-docker)
+ARG R_VERSION=DyndocRubyRVERSION
+ARG OS_IDENTIFIER=DyndocRubyOSIDENTIFIER
+RUN wget https://cdn.rstudio.com/r/${OS_IDENTIFIER}/pkgs/r-${R_VERSION}_1_amd64.deb && \
+	DEBIAN_FRONTEND=noninteractive apt-get install -f -y ./r-${R_VERSION}_1_amd64.deb && \
+	ln -sf /opt/R/${R_VERSION}/bin/R /usr/bin/R && \
+	ln -sf /opt/R/${R_VERSION}/bin/Rscript /usr/bin/Rscript && \
+	ln -sf /opt/R/${R_VERSION}/lib/R /usr/lib/R && \
+	rm r-${R_VERSION}_1_amd64.deb
 
-RUN apt-get install -y curl wget locales
-RUN apt-get install -y software-properties-common
+RUN rm -rf /var/lib/apt/lists/*
+################################
+
+
+RUN gem install daemons thin \
+      roda tilt erubis erubi \
+      dyndoc-ruby \
+      asciidoctor redcarpet filewatcher \ 
+      --no-ri --no-rdoc
+
+RUN R -e 'install.packages("devtools",repos="http://cran.rstudio.com/")' \
+      R -e 'devtools::install_github("rcqls/rb4R",args="--no-multiarch",build=FALSE)' \ 
+      R -e 'install.packages("base64",repos="http://cran.rstudio.com/")'
+
 
 RUN locale-gen fr_FR.UTF-8  
 ENV LANG fr_FR.UTF-8  
@@ -18,12 +53,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        tzdata
-        
-RUN bash -c "$(curl -fs https://cqls.dyndoc.fr/users/RCqls/Dyndoc/install/install-ubuntu16.sh)"
-
-EXPOSE 9294
+ 
+RUN groupadd -r ubuntu && useradd -r -g ubuntu ubuntu
 
 WORKDIR /home/ubuntu
 

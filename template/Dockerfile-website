@@ -3,6 +3,8 @@ MAINTAINER "Cqls Team"
 
 USER ubuntu
 
+EXPOSE 9294
+
 RUN mkdir -p /home/ubuntu/RodaSrv/public/edit
 RUN mkdir -p /home/ubuntu/RodaSrv/public/users
 RUN mkdir -p /home/ubuntu/dyndoc-library
@@ -10,10 +12,5 @@ RUN mkdir -p /home/ubuntu/.dyndoc-world
 RUN mkdir -p /home/ubuntu/tools/bin
 
 ENV PATH=$PATH:/home/ubuntu/tools/bin
-
-RUN dyn-init
-
-RUN dpm install rcqls/DyndocWebTools.dyn
-RUN dpm link rcqls/DyndocWebTools.dyn
 
 ENTRYPOINT /usr/local/bin/dyn-ctl start && /bin/bash

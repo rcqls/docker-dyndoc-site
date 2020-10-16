@@ -20,15 +20,19 @@ new)
     rodaport=9700
     rodauid=1000
     rodagid=1000
-    rodapublic=../RodaPublic
-    rodadyndoclibrary=../dyndoc-library
-    rodadyndocworld=../dyndoc-world
     rodatools=$HOME/Share/Roda
     rodamongouser=mongo
     rodamongopwd=lol2mongo
     rodamongoport=27018
-    rodamongodir=../dyndoc-mongo
     dyndocubuntu=disco
+    rversion="4.0.2"
+    osidentifier="ubuntu-204"
+    ## user root to mount volumes
+    user_root=$HOME/Share/DockerSite
+    rodapublic=RodaPublic
+    rodadyndoclibrary=dyndoc-library
+    rodadyndocworld=dyndoc-world
+    rodamongodir=dyndoc-mongo
     while true 
     do
         cmd=$1
@@ -46,6 +50,10 @@ new)
             rodagid=$1
             shift
         ;;
+        -r|--user-root)
+            user_root=$1
+            shift
+        ;;
         -p|--public)
             rodapublic=$1
             shift
@@ -56,6 +64,14 @@ new)
         ;;
         -u|--ubuntu)
             dyndocubuntu=$1
+            shift
+        ;;
+        --os)
+            osidentifier=$1
+            shift
+        ;;
+        --rversion)
+            rversion=$1
             shift
         ;;
         -l|--libs)
@@ -88,6 +104,10 @@ new)
         esac
         cmd=$1
     done
+    rodapublic="${user_root}/${rodapublic}"
+    rodadyndoclibrary="${user_root}/${rodadyndoclibrary}"
+    rodadyndocworld="${user_root}/${rodadyndocworld}"
+    rodamongodir="${user_root}/${rodamongodir}"
     ## RodaSrvPublic folder volume to mount
     mkdir -p $rodapublic
     mkdir -p $rodadyndoclibrary
@@ -121,6 +141,8 @@ new)
     txt=${txt//RodaSrvPublic/$rodapublic}
     txt=${txt//RodaSrvTools/$rodatools}
     txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
+    txt=${txt//DyndocRubyRVERSION/$rversion}
+    txt=${txt//DyndocRubyOSIDENTIFIER/$osidentifier}
     txt=${txt//RodaSrvDyndocLibrary/$rodadyndoclibrary}
     txt=${txt//RodaSrvDyndocWorld/$rodadyndocworld}
     echo "$txt" > "DockerFiles/Dockerfile-dyndoc"
@@ -230,10 +252,15 @@ jl-pkg)
 dpm | dyn-pkg | pkg)
     user=$1
     pkg=$2
-    echo "if ! [ -d /home/ubuntu/tools/dyndoc/library/${pkg}.dyn ]; then" > $script
-	echo "	dpm install ${user}/${pkg}.dyn" >> $script
-	echo "	dpm link ${user}/${pkg}.dyn" >> $script
-	echo "fi" >> $script
+    link=$3
+    if [ "${link}" = "" ]; then
+        link="${user}/${pkg}"
+    else
+        link="${user}/${pkg}/${link}"
+    fi
+     
+	echo "dpm install ${user}/${pkg}" > $script
+	echo "dpm link ${link}" >> $script
     docker-compose exec --user root website bash ${guest_script}
     ;;
 mongo-up)
