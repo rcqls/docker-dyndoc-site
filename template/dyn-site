@@ -1,0 +1,137 @@
+#!/bin/bash
+
+cmd=$1
+shift
+script="../guest-tools/bin/.action.sh"
+guest_script="/home/ubuntu/tools/bin/.action.sh"
+
+RootSrv=/home/ubuntu/RodaSrv 
+
+if [ -f "$script" ]; then
+    echo "## do not modify since automatically generated" > $script
+fi
+
+case $cmd in
+init)
+    ## Create the RodaSrv folders inside container
+    echo "mkdir -p /home/ubuntu/RodaSrv/edit" >  $script
+    echo "mkdir -p /home/ubuntu/RodaSrv/public" >>  $script
+    echo "cd /home/ubuntu/RodaSrv"  >>  $script
+    echo "ln -sf .tools/system system" >>  $script
+    echo "cd public"  >>  $script
+    echo "ln -sf ../.tools/tools tools" >>  $script
+    ## Config file
+    echo "echo '---' > /home/ubuntu/dyndoc/etc/dyn-html.yml" >> $script
+    echo "echo 'root: /home/ubuntu/RodaSrv' >> /home/ubuntu/dyndoc/etc/dyn-html.yml" >> $script
+    docker-compose exec --user ubuntu WEBSITE bash ${guest_script}
+    ;;
+add)
+    # get RodaWebUser from environment variable
+    RodaWebUser=$1
+    if [ "$RodaWebUser" != "" ]; then
+        echo "mkdir -p ${RootSrv}/public/pages" >>  $script
+        echo "mkdir -p ${RootSrv}/public/users/${RodaWebUser}/{.pages,.edit}" >>  $script
+        echo "cd ${RootSrv}/public/pages" >>  $script
+        echo "ln -sf ../users/${RodaWebUser}/.pages ${RodaWebUser}" >>  $script
+        echo "cd ${RootSrv}/edit" >>  $script
+        echo "ln -sf ../public/users/${RodaWebUser}/.edit ${RodaWebUser}" >>  $script
+        docker-compose exec --user ubuntu WEBSITE bash ${guest_script}
+    fi
+    if [ "$2" == "--with-rodasrv-dir" ]; then
+        mkdir -p ~/RodaSrv/edit
+        RodapublicPath=$(readlink -f "`pwd`/../RodaPublic")
+        cd ~/RodaSrv
+        ln -s ${RodapublicPath} public
+        cd edit
+        ln -s "${RodapublicPath}/users/${RodaWebUser}/.edit" ${RodaWebUser}
+    fi
+    ;;
+status | start | stop)
+    docker-compose exec --user ubuntu WEBSITE bash -c "/usr/local/bin/dyn-ctl $cmd"
+    ;;
+bash)
+    user=ubuntu
+    if [ "$1" = "--user-root" ];then
+        user=root
+    fi
+    docker-compose exec --user $user WEBSITE bash
+    ;;
+build)
+    docker-compose build DYNDOCRUBY
+    docker-compose build WEBSITE
+    ;;
+up)
+    docker-compose up -d WEBSITE
+    ;;
+down)
+    docker-compose down
+    ;;
+pause)
+    docker-compose pause
+    ;;
+unpause)
+    docker-compose unpause
+    ;;
+*-user)
+    echo ". /home/ubuntu/tools/bin/.install.sh" >> $script
+    echo "${cmd} $*" >> $script
+    docker-compose exec --user ubuntu WEBSITE bash ${guest_script}
+    ;;
+*-root)
+    echo ". /home/ubuntu/tools/bin/.install.sh" >> $script
+    echo "${cmd} $*" >> $script
+    docker-compose exec --user root WEBSITE bash ${guest_script}
+    ;;
+*-host)
+    . scripts/host-install.sh
+    ${cmd} $*
+    ;;
+gem)
+    echo "gem $*" > $script
+    docker-compose exec --user root WEBSITE bash ${guest_script}
+    ;;
+rb-pkg)
+    echo "gem install $*" > $script
+    docker-compose exec --user root WEBSITE bash ${guest_script}
+    ;;
+R-pkg)
+    echo "R -e \"install.packages('${1}',repos='http://cran.rstudio.com/')\"" > $script
+    docker-compose exec --user root WEBSITE bash ${guest_script}
+    ;;
+jl-pkg)
+    echo "julia -e 'import Pkg;Pkg.add(\"${1}\")'" > $script
+    docker-compose exec --user root WEBSITE bash ${guest_script}
+    ;;
+dpm | dyn-pkg | pkg)
+    user=$1
+    pkg=$2
+    link=$3
+    if [ "${link}" = "" ]; then
+        link="${user}/${pkg}"
+    else
+        link="${user}/${pkg}/${link}"
+    fi
+     
+	echo "dpm install ${user}/${pkg}" > $script
+	echo "dpm link ${link}" >> $script
+    docker-compose exec --user root WEBSITE bash ${guest_script}
+    ;;
+mongo-up)
+    docker-compose up -d mongo
+    ;;
+mongo-down)
+    docker-compose down mongo
+    ;;
+mongo)
+    docker-compose $* mongo
+    ;;
+mongo-express-up)
+    docker-compose up -d mongo-express${rodaname}
+    ;;
+mongo-express-down)
+    docker-compose down mongo-express${rodaname}
+    ;;
+mongo-express)
+    docker-compose $* mongo-express${rodaname}
+    ;;
+esac
