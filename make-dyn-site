@@ -175,7 +175,7 @@ echo "$txt" > "DockerFiles/Dockerfile-website"
 dyndocrubyname="dyndoc-ruby${rodaname}"
 websitename="website${rodaname}"
 mongoexpressname="mongo-express${rodaname}"
-mongoname:"mongo${rodaname}"
+mongoname="mongo${rodaname}"
 txt=`cat template/dyn-site`
 txt=${txt//DYNDOCRUBY/$dyndocrubyname}
 txt=${txt//WEBSITE/$websitename}
