@@ -178,4 +178,5 @@ txt=`cat template/dyn-site`
 txt=${txt//DYNDOCRUBY/$dyndocrubyname}
 txt=${txt//WEBSITE/$websitename}
 echo "$txt" > "dyn-site"
+chmod u+x dyn-site
 
