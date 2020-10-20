@@ -179,8 +179,8 @@ mongoname="mongo${rodaname}"
 txt=`cat template/dyn-site`
 txt=${txt//DYNDOCRUBY/$dyndocrubyname}
 txt=${txt//WEBSITE/$websitename}
-txt=${txt//MONGOEXPRESS/${mongoexpressname}}
-txt=${txt//MONGODB/${mongoname}}
+txt=${txt//MONGOEXPRESSNAME/${mongoexpressname}}
+txt=${txt//MONGONAME/${mongoname}}
 echo "$txt" > "dyn-site"
 chmod u+x dyn-site
 

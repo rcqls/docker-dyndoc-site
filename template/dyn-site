@@ -117,13 +117,13 @@ dpm | dyn-pkg | pkg)
     docker-compose exec --user root WEBSITE bash ${guest_script}
     ;;
 mongo-up)
-    docker-compose up -d MONGODBNAME
+    docker-compose up -d MONGONAME
     ;;
 mongo-down)
-    docker-compose down MONGODBNAME
+    docker-compose down MONGONAME
     ;;
 mongo)
-    docker-compose $* MONGODBNAME
+    docker-compose $* MONGONAME
     ;;
 mongo-express-up)
     docker-compose up -d MONGOEXPRESSNAME
