@@ -1,3 +1,7 @@
+dyn-init-etc-user() {
+	dyn-init install etc
+}
+
 export-rubylib-user() {
 	mkdir -p /home/ubuntu/tools/etc
 	script=/home/ubuntu/tools/etc/bashrc
