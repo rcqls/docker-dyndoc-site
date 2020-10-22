@@ -12,5 +12,6 @@ RUN mkdir -p /home/ubuntu/.dyndoc-world
 RUN mkdir -p /home/ubuntu/tools/bin
 
 ENV PATH=$PATH:/home/ubuntu/tools/bin
+ENV LD_LIBRARY_PATH=`R RHOME`/lib
 
 ENTRYPOINT /usr/local/bin/dyn-ctl start && /bin/bash
