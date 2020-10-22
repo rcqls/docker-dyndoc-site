@@ -72,6 +72,9 @@ pause)
 unpause)
     docker-compose unpause
     ;;
+update-guest-script)
+    cp scripts/guest-install.sh ../guest-tools/bin/.install.sh
+    ;;
 *-user)
     echo ". /home/ubuntu/tools/bin/.install.sh" >> $script
     echo "${cmd} $*" >> $script
