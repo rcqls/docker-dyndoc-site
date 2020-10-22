@@ -1,4 +1,4 @@
-user-dyn-init-etc() {
+user-dyn-init-install-etc() {
 	dyn-init install etc
 }
 
