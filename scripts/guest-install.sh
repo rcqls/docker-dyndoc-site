@@ -11,8 +11,16 @@ user-export-rubylib() {
 user-links() {
 	mkdir -p /home/ubuntu/tools/etc
 	cd /home/ubuntu
-	ln -sf tools/etc/bashrc .bashrc
-	ln -sf tools/etc/dyndoc.yml .dyndoc.yml
+	if [ -f tools/etc/bashrc ]; then
+		ln -sf tools/etc/bashrc .bashrc
+	else
+		echo "tools/etc/bashrc missing and not linked to .bashrc"
+	fi
+	if [ -f tools/etc/dyndoc.yml ]; then
+		ln -sf tools/etc/dyndoc.yml .dyndoc.yml
+	else
+		echo "tools/etc/dyndoc.yml missing and not linked to .dyndoc.yml"
+	fi
 }
 
 user-install-dyndoc() {
