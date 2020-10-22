@@ -1,21 +1,21 @@
-dyn-init-etc-user() {
+user-dyn-init-etc() {
 	dyn-init install etc
 }
 
-export-rubylib-user() {
+user-export-rubylib() {
 	mkdir -p /home/ubuntu/tools/etc
 	script=/home/ubuntu/tools/etc/bashrc
 	echo "export JULIA_RUBYLIB_PATH=$(/usr/bin/env ruby -e 'puts Dir[RbConfig::CONFIG["libdir"]+"/**/libruby*"].select{|e| e =~ /\.so$/}[0]')" >> $script
 }
 
-links-user() {
+user-links() {
 	mkdir -p /home/ubuntu/tools/etc
 	cd /home/ubuntu
 	ln -sf tools/etc/bashrc .bashrc
 	ln -sf tools/etc/dyndoc.yml .dyndoc.yml
 }
 
-install-dyndoc-user() {
+user-install-dyndoc() {
 	if ! [[ -L /home/ubuntu/dyndoc && -d /home/ubuntu/dyndoc ]]; then
 		cd /home/ubuntu
 		if [ -d tools/dyndoc ]; then
@@ -52,17 +52,17 @@ install-dyndoc-user() {
 # }
 
 ## A appeler en début d'install
-install-begin-root() {
+root-install-begin() {
 	apt-get update -qq
 }
 
 ## A appeler en fin d'install
-install-end-root() {
+root-install-end() {
 	rm -rf /var/lib/apt/lists/*
 }
 
 ## OLD to install R, ruby and dyndoc: curl -fs https://cqls.dyndoc.fr/users/RCqls/Dyndoc/install/install-ubuntu16.sh
-install-r-root() {
+root-install-r() {
 	R_VERSION=4.0.2
 	OS_IDENTIFIER=ubuntu-2004
 	if [ "$1" != "" ]; then
@@ -89,13 +89,13 @@ install-r-root() {
 	rm r-${R_VERSION}_1_amd64.deb
 }
 
-install-ruby-root() {
+root-install-ruby() {
 	echo "Installing ruby"
 	apt-get install -y ruby ruby-dev libruby
 }
 
 ## From r-docker/base
-install-tinytex-root() {
+root-install-tinytex() {
 	echo "Installing tinytex...."
 	wget -qO- "https://yihui.name/gh/tinytex/tools/install-unx.sh" | sh -s - --admin --no-path && \
     mv ~/.TinyTeX /opt/TinyTeX && \
@@ -103,7 +103,7 @@ install-tinytex-root() {
 }
 
 ## From r-docker/base
-install-pandoc-root() {
+root-install-pandoc() {
 	echo "Installing pandoc..."
 	mkdir -p /opt/pandoc && \
     wget -O /opt/pandoc/pandoc.gz https://files.r-hub.io/pandoc/linux-64/pandoc.gz && \
@@ -116,7 +116,7 @@ install-pandoc-root() {
     ln -s /opt/pandoc/pandoc-citeproc /usr/bin/pandoc-citeproc
 }
 
-install-ttm-root() {
+root-install-ttm() {
 	echo "Installing ttm..."
 	mkdir ~/.ttm-tmp
 	cd ~/.ttm-tmp
@@ -129,7 +129,7 @@ install-ttm-root() {
 	rm -fr ~/.ttm-tmp
 }
 
-install-dyndoc-root() {
+root-install-dyndoc() {
 	echo "Installing gems dependencies ..."
 	sudo gem install daemons thin roda tilt erubis erubi  --no-ri --no-rdoc
 
@@ -159,7 +159,7 @@ install-dyndoc-root() {
 	sudo gem install filewatcher --no-ri --no-rdoc
 }
 
-install-dynlib-user() {
+user-install-dynlib() {
 	echo "Installing dyndoc package DyndocWebTools.dyn ..."
 	dpm install rcqls/DyndocWebTools.dyn
 	dpm link rcqls/DyndocWebTools.dyn

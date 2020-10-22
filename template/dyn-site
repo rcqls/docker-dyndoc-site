@@ -72,20 +72,21 @@ pause)
 unpause)
     docker-compose unpause
     ;;
-update-guest-script)
+### Installation scripts 
+update-guest-script) # update the guest (user-* root-*) scripts executed inside container
     cp scripts/guest-install.sh ../guest-tools/bin/.install.sh
     ;;
-user-* | *-user)
+user-*) 
     echo ". /home/ubuntu/tools/bin/.install.sh" >> $script
     echo "${cmd} $*" >> $script
     docker-compose exec --user ubuntu WEBSITE bash ${guest_script}
     ;;
-root-* | *-root)
+root-*)
     echo ". /home/ubuntu/tools/bin/.install.sh" >> $script
     echo "${cmd} $*" >> $script
     docker-compose exec --user root WEBSITE bash ${guest_script}
     ;;
-host-* | *-host)
+host-*)
     . scripts/host-install.sh
     ${cmd} $*
     ;;
