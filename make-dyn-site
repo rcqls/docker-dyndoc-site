@@ -15,6 +15,7 @@ mkdir -p bin
 mkdir -p DockerFiles
 ## 
 rodaname=""
+rodaincport=""
 rodaport=9700
 rodauid=1000
 rodagid=1000
@@ -39,6 +40,10 @@ do
 	case $cmd in
 	-n|--name)
 		rodaname=$1
+		shift
+	;;
+	--inc-port)
+		rodaincport=$1
 		shift
 	;;
 	--port)
@@ -114,6 +119,11 @@ done
 if [ "${rodaname}" = "" ]; then
 	rodaname="-${dyndocubuntu}"
 fi 
+if [ "${rodaincport}" != "" ]; then
+	rodaport="$(($rodaport + $rodaincport))"
+	rodamongoport="$(($rodamongoport + $rodaincport))"
+	rodamongoexpressport="$(($rodamongoexpressport + $rodaincport))"
+fi
 rodapublic="${user_root}/${rodapublic}"
 rodadyndoclibrary="${user_root}/${rodadyndoclibrary}"
 rodadyndocworld="${user_root}/${rodadyndocworld}"
