@@ -1,0 +1,238 @@
+#!/bin/bash
+
+cmd=$1
+shift
+
+RootSrv=/home/ubuntu/RodaSrv 
+
+
+
+## 
+rodaname=""
+rodaincport=""
+rodaport=9700
+rodauid=1000
+rodagid=1000
+rodatools=$HOME/Share/Roda
+dyndocubuntu=focal
+rversion="4.0.2"
+osidentifier="ubuntu-2004"
+
+## name of tool
+rodatoolsname=default
+rodamongoname=default
+
+## default name for common network
+networkname=dyn_network
+
+## working directory to mount volumes 
+rodawd=$HOME/Share/DockerSite
+
+
+mongouser=mongo
+mongopwd=lol2mongo
+mongoport=27018
+mongoexpressport=8081
+mongodir=dyndoc-mongo
+
+while true 
+do
+	cmd=$1
+	shift
+	case $cmd in
+	--net)
+		networkname=$1
+		shift
+		;;
+	--tools-name)
+		rodatoolsname=$1
+		shift
+	;;
+	--mongo-name)
+		rodamongoname=$1
+		shift
+	;;
+	--inc-port)
+		incport=$1
+		shift
+	;;
+	--port)
+		rodaport=$1
+		shift
+	;;
+	--uid)
+		rodauid=$1
+		shift
+	;;
+	--gid)
+		rodagid=$1
+		shift
+	;;
+	-w|--wd|--working-dir)
+		rodawd=$1
+		shift
+	;;
+	-t|--tools)
+		rodatools=$1
+		shift
+	;;
+	-u|--ubuntu)
+		dyndocubuntu=$1
+		shift
+	;;
+	--os)
+		osidentifier=$1
+		shift
+	;;
+	--rversion)
+		rversion=$1
+		shift
+	;;
+	--mongo-user)
+		mongouser=$1
+		shift
+	;;
+	--mongo-pwd)
+		mongopwd=$1
+		shift
+	;;
+	--mongo-port)
+		mongoport=$1
+		shift
+	;;
+	--mongo-express-port)
+		mongoexpressport=$1
+		shift
+	;;
+	--mongo-dir)
+		mongodir=$1
+		shift
+	;;
+	*)
+		break
+	;;
+	esac
+	cmd=$1
+done
+
+
+case $cmd in
+network)
+	network=$networkname
+	if [ "$1" != "" ]; then 
+		network=$1
+	fi
+	docker network create -d bridge $network
+	;;
+workdir | wd)
+	wd=$1
+	# subdirs to mount in user root
+	rodapublic=$wd/RodaPublic
+	rodadyndoclibrary=$wd/dyndoc-library
+	rodadyndocworld=$wd/dyndoc-world
+	
+	mkdir -p $rodapublic
+	mkdir -p $rodadyndoclibrary
+	mkdir -p $rodadyndocworld
+	;;
+mongo) ## characterized by an id
+	mongoname=default
+	if [ "$1" != "" ]; then 
+		mongoname=$1
+	fi
+	mongodir="${mongodir}/${mongoname}"
+	if [ "${incport}" != "" ]; then
+		mongoport="$(($mongoport + $incport))"
+		mongoexpressport="$(($mongoexpressport + $incport))"
+	fi
+	mkdir -p $mongodir/data/db
+	mkdir -p $mongodir/data/configdb
+
+	# creating docker-compose.yml
+	txt=`cat template/docker-compose.mongo.yml`
+	txt=${txt//MongoUser/$mongouser}
+	txt=${txt//MongoPwd/$mongopwd}
+	txt=${txt//MongoPort/$mongoport}
+	txt=${txt//MongoExpressPort/$mongoexpressport}
+	txt=${txt//MongoDir/$mongodir}
+	txt=${txt//NetworkName/$networkname}
+	mkdir -p ../dbs/${mongoname}
+	echo "$txt" > "../dbs/${mongoname}/docker-compose.yml"
+	;;
+tools)
+	toolname=default
+	if [ "$1" != "" ]; then 
+		toolname=$1
+	fi
+	mkdir -p ../tools/${toolname}/bin
+	cp scripts/guest-install.sh ../tools/${toolname}/bin/.install.sh
+	;;
+site)
+	site="../sites/$1"
+	shift
+	mkdir -p $site/bin
+	mkdir -p $site/Dockerfiles
+
+	if [ "${rodaname}" = "" ]; then
+		rodaname="-${dyndocubuntu}"
+	fi 
+	if [ "${rodaincport}" != "" ]; then
+		rodaport="$(($rodaport + $rodaincport))"
+	fi
+	rodapublic="${rodawd}/RodaPublic"
+	rodadyndoclibrary="${rodawd}/dyndoc-library"
+	rodadyndocworld="${rodawd}/dyndoc-world"
+	
+	# creating docker-compose.yml
+	txt=`cat template/docker-compose.yml`
+	txt=${txt//RodaName/$rodaname}
+	txt=${txt//RodaSrvPort/$rodaport}
+	txt=${txt//RodaSrvUID/$rodauid}
+	txt=${txt//RodaSrvGID/$rodagid}
+	txt=${txt//RodaSrvPublic/$rodapublic}
+	txt=${txt//RodaSrvTools/$rodatools}
+	txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
+	txt=${txt//RodaSrvDyndocLibrary/$rodadyndoclibrary}
+	txt=${txt//RodaSrvDyndocWorld/$rodadyndocworld}
+	txt=${txt//RodaSrvMongoUser/$rodamongouser}
+	txt=${txt//RodaSrvMongoPwd/$rodamongopwd}
+	txt=${txt//RodaSrvMongoPort/$rodamongoport}
+	txt=${txt//RodaSrvMongoExpressPort/$rodamongoexpressport}
+	txt=${txt//RodaSrvMongoDir/$rodamongodir}
+	txt=${txt//NetworkName/$networkname}
+	rodatoolsname="../../tools/${rodatoolsname}"
+	txt=${txt//RodaToolsName/$rodatoolsname}
+	echo "$txt" > "$site/docker-compose.yml"
+
+	# creating DockerFile-dyndoc
+	txt=`cat template/Dockerfile-dyndoc`
+	txt=${txt//RodaSrvPort/$rodaport}
+	txt=${txt//RodaSrvUID/$rodauid}
+	txt=${txt//RodaSrvGID/$rodagid}
+	txt=${txt//RodaSrvPublic/$rodapublic}
+	txt=${txt//RodaSrvTools/$rodatools}
+	txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
+	txt=${txt//DyndocRubyRVERSION/$rversion}
+	txt=${txt//DyndocRubyOSIDENTIFIER/$osidentifier}
+	txt=${txt//RodaSrvDyndocLibrary/$rodadyndoclibrary}
+	txt=${txt//RodaSrvDyndocWorld/$rodadyndocworld}
+	echo "$txt" > "$site/DockerFiles/Dockerfile-dyndoc"
+
+	# creating DockerFile-website
+	txt=`cat template/Dockerfile-website`
+	txt=${txt//RodaSrvPort/$rodaport}
+	txt=${txt//RodaSrvUID/$rodauid}
+	txt=${txt//RodaSrvGID/$rodagid}
+	txt=${txt//RodaSrvPublic/$rodapublic}
+	txt=${txt//RodaSrvTools/$rodatools}
+	txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
+	txt=${txt//RodaSrvDyndocLibrary/$rodadyndoclibrary}
+	txt=${txt//RodaSrvDyndocWorld/$rodadyndocworld}
+	echo "$txt" > "$site/DockerFiles/Dockerfile-website"
+
+	 
+	cp template/dyn-site $site/dyn-site
+	chmod u+x $site/dyn-site
+
+	;;
+esac

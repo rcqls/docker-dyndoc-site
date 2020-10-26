@@ -12,19 +12,6 @@ if [ -f "$script" ]; then
 fi
 
 case $cmd in
-init)
-    ## Create the RodaSrv folders inside container
-    echo "mkdir -p /home/ubuntu/RodaSrv/edit" >  $script
-    echo "mkdir -p /home/ubuntu/RodaSrv/public" >>  $script
-    echo "cd /home/ubuntu/RodaSrv"  >>  $script
-    echo "ln -sf .tools/system system" >>  $script
-    echo "cd public"  >>  $script
-    echo "ln -sf ../.tools/tools tools" >>  $script
-    ## Config file
-    echo "echo '---' > /home/ubuntu/dyndoc/etc/dyn-html.yml" >> $script
-    echo "echo 'root: /home/ubuntu/RodaSrv' >> /home/ubuntu/dyndoc/etc/dyn-html.yml" >> $script
-    docker-compose exec --user ubuntu WEBSITE bash ${guest_script}
-    ;;
 add)
     # get RodaWebUser from environment variable
     RodaWebUser=$1
@@ -35,7 +22,7 @@ add)
         echo "ln -sf ../users/${RodaWebUser}/.pages ${RodaWebUser}" >>  $script
         echo "cd ${RootSrv}/edit" >>  $script
         echo "ln -sf ../public/users/${RodaWebUser}/.edit ${RodaWebUser}" >>  $script
-        docker-compose exec --user ubuntu WEBSITE bash ${guest_script}
+        docker-compose exec --user ubuntu website bash ${guest_script}
     fi
     if [ "$2" == "--with-rodasrv-dir" ]; then
         mkdir -p ~/RodaSrv/edit
@@ -47,21 +34,21 @@ add)
     fi
     ;;
 status | start | stop)
-    docker-compose exec --user ubuntu WEBSITE bash -c "/usr/local/bin/dyn-ctl $cmd"
+    docker-compose exec --user ubuntu website bash -c "/usr/local/bin/dyn-ctl $cmd"
     ;;
 bash)
     user=ubuntu
     if [ "$1" = "--user-root" ];then
         user=root
     fi
-    docker-compose exec --user $user WEBSITE bash
+    docker-compose exec --user $user website bash
     ;;
 build)
-    docker-compose build DYNDOCRUBY
-    docker-compose build WEBSITE
+    docker-compose build dyndoc-ruby
+    docker-compose build website
     ;;
 up)
-    docker-compose up -d WEBSITE
+    docker-compose up -d website
     ;;
 down)
     docker-compose down
@@ -79,12 +66,12 @@ update-guest-script) # update the guest (user-* root-*) scripts executed inside 
 user-*) 
     echo ". /home/ubuntu/tools/bin/.install.sh" >> $script
     echo "${cmd} $*" >> $script
-    docker-compose exec --user ubuntu WEBSITE bash ${guest_script}
+    docker-compose exec --user ubuntu website bash ${guest_script}
     ;;
 root-*)
     echo ". /home/ubuntu/tools/bin/.install.sh" >> $script
     echo "${cmd} $*" >> $script
-    docker-compose exec --user root WEBSITE bash ${guest_script}
+    docker-compose exec --user root website bash ${guest_script}
     ;;
 host-*)
     . scripts/host-install.sh
@@ -92,19 +79,19 @@ host-*)
     ;;
 gem)
     echo "gem $*" > $script
-    docker-compose exec --user root WEBSITE bash ${guest_script}
+    docker-compose exec --user root website bash ${guest_script}
     ;;
 rb-pkg)
     echo "gem install $*" > $script
-    docker-compose exec --user root WEBSITE bash ${guest_script}
+    docker-compose exec --user root website bash ${guest_script}
     ;;
 R-pkg)
     echo "R -e \"install.packages('${1}',repos='http://cran.rstudio.com/')\"" > $script
-    docker-compose exec --user root WEBSITE bash ${guest_script}
+    docker-compose exec --user root website bash ${guest_script}
     ;;
 jl-pkg)
     echo "julia -e 'import Pkg;Pkg.add(\"${1}\")'" > $script
-    docker-compose exec --user root WEBSITE bash ${guest_script}
+    docker-compose exec --user root website bash ${guest_script}
     ;;
 dpm | dyn-pkg | pkg)
     user=$1
@@ -118,24 +105,6 @@ dpm | dyn-pkg | pkg)
      
 	echo "dpm install ${user}/${pkg}" > $script
 	echo "dpm link ${link}" >> $script
-    docker-compose exec --user root WEBSITE bash ${guest_script}
-    ;;
-mongo-up)
-    docker-compose up -d MONGONAME
-    ;;
-mongo-down)
-    docker-compose down MONGONAME
-    ;;
-mongo)
-    docker-compose $* MONGONAME
-    ;;
-mongo-express-up)
-    docker-compose up -d MONGOEXPRESSNAME
-    ;;
-mongo-express-down)
-    docker-compose down MONGOEXPRESSNAME
-    ;;
-mongo-express)
-    docker-compose $* MONGOEXPRESSNAME
+    docker-compose exec --user root website bash ${guest_script}
     ;;
 esac

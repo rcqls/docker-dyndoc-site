@@ -1,11 +1,3 @@
-host-etc-dyn-html() {
-	guestdir=$(pwd)/../guest-tools
-	script=${guestdir}/dyndoc/etc/dyn-html.yml
-	mkdir -p ${guestdir}/dyndoc/etc
-	echo "---" > $script
-	echo "root: /home/ubuntu/RodaSrv" >> $script
-}
-
 host-install-julia() {
 	guestdir=$(pwd)/../guest-tools
 	jl=$1

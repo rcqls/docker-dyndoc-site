@@ -1,15 +1,21 @@
-user-dyn-init-install-etc() {
-	dyn-init install etc
+user-rodasrv() {
+    ## Create the RodaSrv folders inside container
+    mkdir -p /home/ubuntu/RodaSrv/edit
+    mkdir -p /home/ubuntu/RodaSrv/public
+    cd /home/ubuntu/RodaSrv
+	ln -sf .tools/system system
+	cd public
+	ln -sf ../.tools/tools tools
 }
 
-user-export-rubylib() {
-	mkdir -p /home/ubuntu/tools/etc
-	script=/home/ubuntu/tools/etc/bashrc
-	echo "export JULIA_RUBYLIB_PATH=$(/usr/bin/env ruby -e 'puts Dir[RbConfig::CONFIG["libdir"]+"/**/libruby*"].select{|e| e =~ /\.so$/}[0]')" >> $script
+user-etc-dyn-html() {
+	## Config file
+    mkdir -p /home/ubuntu/dyndoc/etc
+    echo '---' > /home/ubuntu/dyndoc/etc/dyn-html.yml
+    echo 'root: /home/ubuntu/RodaSrv' >> /home/ubuntu/dyndoc/etc/dyn-html.yml
 }
 
-user-links() {
-	mkdir -p /home/ubuntu/tools/etc
+user-ln-tools-etc() {
 	cd /home/ubuntu
 	if [ -f tools/etc/bashrc ]; then
 		ln -sf tools/etc/bashrc .bashrc
@@ -35,6 +41,17 @@ user-install-dyndoc() {
 		fi
 		ln -sf tools/dyndoc dyndoc
 	fi
+}
+
+
+user-dyn-init-install-etc() {
+	dyn-init install etc
+}
+
+user-export-rubylib() {
+	mkdir -p /home/ubuntu/tools/etc
+	script=/home/ubuntu/tools/etc/bashrc
+	echo "export JULIA_RUBYLIB_PATH=$(/usr/bin/env ruby -e 'puts Dir[RbConfig::CONFIG["libdir"]+"/**/libruby*"].select{|e| e =~ /\.so$/}[0]')" >> $script
 }
 
 # install-julia-guest-user() {
