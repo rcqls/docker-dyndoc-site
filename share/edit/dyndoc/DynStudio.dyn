@@ -1,0 +1,343 @@
+---
+model: jquery3
+title: DynStudio
+semantic_ui: css,js
+---
+[#require]Erb/AceEditor
+[#main]
+[#=]save_callback[$("#status").html("Save: " + res["status"]);
+if(res["status"] == "OK") {
+  var link=editor_:{editor_protect}.getSession().getValue();
+  $.get('/dynworld/dyn-html', { 'file' : link})
+  .done(function (res) {
+    //alert("save: "+res);
+    $("#dyn-html").attr("action","/"+res);
+  })
+  .fail(function() {
+    alert("save failed ");
+  })
+}]
+[#rb<]require 'digest'
+editor_protect= Digest::SHA1.hexdigest("unlock")
+[#<]
+{#LayoutCSSHeader]
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/themes/default/style.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" crossorigin="anonymous">
+[#}
+{#LayoutJSHeader]<script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/jstree.min.js"></script>[#}
+{#LayoutJSHeader]<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/min/dropzone.min.js"></script>[#LayoutJSHeader}
+{#LayoutCSSHeader]<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/min/dropzone.min.css">[#LayoutCSSHeader}
+[#>]
+<div class="ui attached top menu">
+    <div class="item">
+      <div class="ui attached message">
+        <div id="status" class="content">
+          Etat des opérations
+        </div>
+      </div>
+    </div>
+    <div class="ui right aligned item">
+      <div id="info" class="ui right aligned item">
+        <div id="infotxt" class="ui label"></div>
+      </div>
+      <div class="ui action input">
+        <input id="connect" type="password" placeholder=".........">
+        <div id="go" class="ui yellow button">Go</div>
+      </div>
+    </div>
+    
+</div>
+
+<div class="ui top attached tabular menu">
+  <a class="item active" data-tab="edit">Edit</a>
+  <a class="item" data-tab="public">Public</a>
+</div>
+<div class="ui bottom attached tab segment active" data-tab="edit">
+ 
+  <div class="ui grid">
+    <div class="ten wide column">
+{#AceEditor#}
+
+{#AceEditor]dynstudio[#mode]dyndoc[#theme]solarized_light
+[#savecb]#{save_callback}
+[#opencb]$("#status").html("Open: " + res["status"]);
+[#opt.width][100%]
+[#protect]unlock[#code][]
+[#}
+    </div>
+    <div class="ui vertical divider"></div>
+    <div class="six wide column">
+    <div id="dyn-menu" class="ui buttons">
+      <button id="dyn-open" class="mini ui green button"><i class="folder open outline icon"></i></button>
+      <button id="dyn-save" class="mini ui green button"><i class="save outline icon"></i></button>
+      <form id="dyn-html" action="https://www.w3docs.com/" method="get" target="_blank">
+         <button type="submit" class="mini ui teal button"><i class="html5 icon"></i></button>
+      </form>
+      
+      <button id="dyn-status" class="mini ui orange button"><i class="ambulance icon"></i></button>
+    </div>
+      <div id="dyn-tree"></div>
+    </div>
+  </div>
+</div>
+<div class="ui bottom attached tab segment" data-tab="public">
+  <div class="ui grid">
+    <div class="six wide column">
+    <form action="/dynworld/file-dropzone-upload" class="dropzone" id="public-upload">
+    </form>
+    </div>
+    <div class="ui vertical divider"></div>
+    <div class="ten wide column">
+      <div id="public-tree"></div>
+    </div>
+  </div>
+</div>
+{#LayoutJSCodePost]
+$("#info").hide();
+$("#go").click(function() {
+  //alert($("#connect").val());
+  $.post( "/dynworld/identify",
+         {user: $("#connect").val()},
+         function(res){
+          //alert(res["prj"]);
+          $("#infotxt").html(res["prj"]+"/"+res["user"]);
+          if(res["prj"] === undefined) {
+            $("#info").hide();
+            $('#dyn-tree').hide();
+            $('#public-tree').hide();
+            $('#dyn-menu').hide();
+            ace.edit("ace_editor_dynstudio").getSession().setValue("");
+
+          } else {
+            $("#info").show();
+            $("#dyn-tree").jstree().refresh();
+            $('#dyn-tree').show();
+            $("#public-tree").jstree().refresh();
+            $('#public-tree').show();
+            $('#dyn-menu').show();
+          }
+         },
+         "json"
+     );
+});
+
+$('.tabular .item')
+  .tab()
+;
+
+function dynfile_open(id) { 
+$.post( "/dynworld/file-open",
+        {file: id},
+        function(res){
+          //alert(res);
+          if(res["success"]) {
+            ace.edit("ace_editor_dynstudio").getSession().setValue(res["content"]);
+          };
+          $("#status").html("Open: " + res["status"]);;
+        },
+        "json"
+      );
+}
+
+function dynfile_save() {
+  var content=ace.edit("ace_editor_dynstudio").getSession().getValue();
+  var file=editor_:{editor_protect}.getSession().getValue();
+  $.post( "/dynworld/file-save",
+      {file: file ,content: content},
+      function(res){
+          #{save_callback};
+      },
+      "json"
+  );
+}
+
+function create_dyntree() {
+  $('#dyn-tree')
+  // listen for event
+  .jstree({
+    'core': {
+        'data' : {
+          "url" : "/dynworld/dynfiles?lazy",
+          "data" : function (node) {
+            return { "id" : node.id };
+          },
+          "dataType" : "json"
+        },
+        check_callback: true,
+        "multiple" : false
+      },
+    "types": {
+      "default" : {
+        "icon" : "fa fa-file"
+      }
+    },
+    "plugins" : [ "contextmenu", "changed", "dnd", "types"]
+    })
+  .on('changed.jstree', function (e, data) {
+    //alert("selected: "+data.selected);
+    console.log("action: "+data.action);
+    var id=data.instance.get_node(data.selected).id;
+    //alert("id: "+id+ " "+typeof(id));
+    if(id !== undefined) {
+      editor_:{editor_protect}.getSession().setValue(id);
+    }
+  })
+  .on('create_node.jstree', function (e, data) {
+    $.get('/dynworld/dyntree?operation=create_node', { 'id' : data.node.id, 'parent' : data.node.parent, 'position' : data.position, 'text' : data.node.text },"json")
+      .done(function (id) {
+        //alert("created id: "+id);
+        data.instance.set_id(data.node, id);
+      })
+      .fail(function () {
+        data.instance.refresh();
+      });
+  }).on('rename_node.jstree', function (e, data) {
+    $.get('/dynworld/dyntree?operation=rename_node', { 'id' : data.node.id, 'text' : data.text , 'old': data.old},"json")
+      .done(function (id) {
+        //alert("rename id: "+id);
+        data.instance.set_id(data.node, id);
+        data.instance.refresh();
+      })
+      .fail(function () {
+        data.instance.refresh();
+      });
+  }).on('delete_node.jstree', function (e, data) {
+    $.get('/dynworld/dyntree?operation=delete_node', { 'id' : data.node.id })
+      .done(function (id) {
+        data.instance.refresh();
+      })
+      .fail(function () {
+        data.instance.refresh();
+      });
+  }).on('move_node.jstree', function (e, data) {
+    $.get('/dynworld/dyntree?operation=move_node', { 'id' : data.node.id, 'parent' : data.parent})
+      .done(function (id) {
+        data.instance.refresh();
+      })
+      .fail(function () {
+        data.instance.refresh();
+      });
+  })
+  .bind("dblclick.jstree", function (event) {
+    var tree = $(this).jstree();
+    var node = tree.get_node(event.target);
+    var id=node.id;
+    if(id.substring(id.length - 4, id.length) == ".dyn") {
+      // $.post( "/dynworld/file-open",
+      //   {file: id},
+      //   function(res){
+      //     //alert(res);
+      //     if(res["success"]) {
+      //       ace.edit("ace_editor_dynstudio").getSession().setValue(res["content"]);
+      //     };
+      //     $("#status").html("Open: " + res["status"]);;
+      //   },
+      //   "json"
+      // );
+      dynfile_open(id);
+    }
+  });
+  ;
+}
+
+create_dyntree();
+
+
+function create_pubtree() {
+  $('#public-tree')
+  // listen for event
+  .jstree({
+    'core': {
+        'data' : {
+          "url" : "/dynworld/pubfiles?lazy",
+          "data" : function (node) {
+            return { "id" : node.id };
+          },
+          "dataType" : "json"
+        },
+        check_callback: true,
+        "multiple" : false
+      },
+    "types" : {
+      "default" : {
+        "icon" : "fa fa-file"
+      }
+    },
+    "plugins" : [ "contextmenu", "changed", "dnd","types"]
+    })
+  .on('create_node.jstree', function (e, data) {
+    $.get('/dynworld/pubtree?operation=create_node', { 'id' : data.node.id, 'parent' : data.node.parent, 'position' : data.position, 'text' : data.node.text },"json")
+      .done(function (id) {
+        //alert("created id: "+id);
+        data.instance.set_id(data.node, id);
+      })
+      .fail(function () {
+        data.instance.refresh();
+      });
+  }).on('rename_node.jstree', function (e, data) {
+    $.get('/dynworld/pubtree?operation=rename_node', { 'id' : data.node.id, 'text' : data.text , 'old': data.old},"json")
+      .done(function (id) {
+        //alert("rename id: "+id);
+        data.instance.set_id(data.node, id);
+        data.instance.refresh();
+      })
+      .fail(function () {
+        data.instance.refresh();
+      });
+  }).on('delete_node.jstree', function (e, data) {
+    $.get('/dynworld/pubtree?operation=delete_node', { 'id' : data.node.id })
+      .done(function (id) {
+        data.instance.refresh();
+      })
+      .fail(function () {
+        data.instance.refresh();
+      });
+  }).on('move_node.jstree', function (e, data) {
+    $.get('/dynworld/pubtree?operation=move_node', { 'id' : data.node.id, 'parent' : data.parent})
+      .done(function (id) {
+        data.instance.refresh();
+      })
+      .fail(function () {
+        data.instance.refresh();
+      });
+  })
+  ;
+}
+
+create_pubtree();
+
+$('#public-tree').hide();
+$('#dyn-tree').hide();
+$('#dyn-menu').hide();
+
+$("#dyn-status").click(function() {
+  $.get('/dynworld/dyn-notify')
+      .done(function (res) {
+        $("#status").html(res);
+      })
+      .fail(function () {
+        $("#status").html();
+      });
+});
+
+$("#dyn-save").click(function() {
+  dynfile_save();
+});
+
+$("#dyn-open").click(function() {
+  var file=editor_:{editor_protect}.getSession().getValue();
+  dynfile_open(file);
+});
+
+Dropzone.options.publicUpload = {
+ paramName: "file", // The name that will be used to transfer the file
+ maxFilesize: 20, // MB
+ addRemoveLinks: true,
+ dictRemoveFile: "Delete",
+ acceptedFiles: "image/*,application/pdf,application/x-latex,application/x-tex,audio/*,video/*",
+ success: function(file) {//Called after adding file successfully
+    $('#public-tree').jstree(true).refresh();
+ }
+};
+
+[#}

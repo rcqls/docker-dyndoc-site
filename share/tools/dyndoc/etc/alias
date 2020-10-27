@@ -1,0 +1,3 @@
+sujet = enonce,exam
+td=enonce > _enonce
+corr,correction = enonce,reponse > _corr
