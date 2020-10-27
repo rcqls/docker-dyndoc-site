@@ -165,6 +165,7 @@ tools)
 	fi
 	mkdir -p ../tools/${toolname}/bin
 	cp scripts/guest-install.sh ../tools/${toolname}/bin/.install.sh
+	cp -r share/tools/* ../tools/${toolname}/
 	;;
 site)
 	site="../sites/$1"
