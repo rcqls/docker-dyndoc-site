@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cmd=$1
+maincmd=$1
 shift
 
 RootSrv=/home/ubuntu/RodaSrv 
@@ -112,11 +112,10 @@ do
 		break
 	;;
 	esac
-	cmd=$1
 done
 
 
-case $cmd in
+case $maincmd in
 network)
 	network=$networkname
 	if [ "$1" != "" ]; then 
