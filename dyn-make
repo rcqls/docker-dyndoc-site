@@ -40,79 +40,78 @@ mongodir=dyndoc-mongo
 while true 
 do
 	cmd=$1
-	shift
 	case $cmd in
 	--net)
-		networkname=$1
 		shift
+		networkname=$1
 		;;
 	--wd-name|--workdir-name)
-		rodawdname=$1
 		shift
+		rodawdname=$1
 	;;
 	--tools-name)
-		rodatoolsname=$1
 		shift
+		rodatoolsname=$1
 	;;
 	--mongo-name)
-		rodamongoname=$1
 		shift
+		rodamongoname=$1
 	;;
 	--inc-port)
-		incport=$1
 		shift
+		incport=$1
 	;;
 	--port)
-		rodaport=$1
 		shift
+		rodaport=$1
 	;;
 	--uid)
-		rodauid=$1
 		shift
+		rodauid=$1
 	;;
 	--gid)
-		rodagid=$1
 		shift
+		rodagid=$1
 	;;
 	-w|--wd|--working-dir)
-		rodawd=$1
 		shift
+		rodawd=$1
 	;;
 	-t|--tools)
-		rodatools=$1
 		shift
+		rodatools=$1
 	;;
 	-u|--ubuntu)
-		dyndocubuntu=$1
 		shift
+		dyndocubuntu=$1
 	;;
 	--os)
-		osidentifier=$1
 		shift
+		osidentifier=$1
 	;;
 	--rversion)
-		rversion=$1
 		shift
+		rversion=$1
 	;;
 	--mongo-user)
-		mongouser=$1
 		shift
+		mongouser=$1
 	;;
 	--mongo-pwd)
-		mongopwd=$1
 		shift
+		mongopwd=$1
 	;;
 	--mongo-port)
-		mongoport=$1
 		shift
+		mongoport=$1
 	;;
 	--mongo-express-port)
-		mongoexpressport=$1
 		shift
+		mongoexpressport=$1
 	;;
 	--mongo-dir)
-		mongodir=$1
 		shift
+		mongodir=$1
 	;;
 	*)
 		break
