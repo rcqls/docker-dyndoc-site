@@ -20,13 +20,15 @@ osidentifier="ubuntu-2004"
 
 ## name of tool
 rodatoolsname=default
+## name of mongo
 rodamongoname=default
+## working directory name to mount volumes 
+rodawdname=default
 
 ## default name for common network
 networkname=dyn_network
 
-## working directory to mount volumes 
-rodawd=$HOME/Share/DockerSite
+
 
 
 mongouser=mongo
@@ -44,6 +46,10 @@ do
 		networkname=$1
 		shift
 		;;
+	--wd-name|--workdir-name)
+		rodawdname=$1
+		shift
+	;;
 	--tools-name)
 		rodatoolsname=$1
 		shift
@@ -124,7 +130,13 @@ network)
 	docker network create -d bridge $network
 	;;
 workdir | wd)
+	wdname=$1
+	shift
 	wd=$1
+	if [ "$wd" = "" ]; then
+		wd=$wdname
+		wdname=default
+	fi
 	# subdirs to mount in user root
 	rodapublic=$wd/RodaPublic
 	rodadyndoclibrary=$wd/dyndoc-library
@@ -133,6 +145,9 @@ workdir | wd)
 	mkdir -p $rodapublic
 	mkdir -p $rodadyndoclibrary
 	mkdir -p $rodadyndocworld
+
+	mkdir -p ../.workdirs/$wdname
+	echo "$wd" > ../.workdirs/$wdname/wdpath
 	;;
 mongo) ## characterized by an id
 	mongoname=default
@@ -179,6 +194,7 @@ site)
 	if [ "${rodaincport}" != "" ]; then
 		rodaport="$(($rodaport + $rodaincport))"
 	fi
+	rodawd=`cat ../../.workdirs/${rodawdname}`
 	rodapublic="${rodawd}/RodaPublic"
 	rodadyndoclibrary="${rodawd}/dyndoc-library"
 	rodadyndocworld="${rodawd}/dyndoc-world"
