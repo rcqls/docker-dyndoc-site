@@ -238,8 +238,10 @@ site)
 	txt=${txt//RodaSrvDyndocWorld/$rodadyndocworld}
 	echo "$txt" > "$site/DockerFiles/Dockerfile-website"
 
-	 
-	cp template/dyn-site $site/dyn-site
+	# creating DockerFile-website
+	txt=`cat template/dyn-site`
+	txt=${txt//RodaToolsName/$rodatoolsname}
+	echo "$txt" > "$site/dyn-site"
 	chmod u+x $site/dyn-site
 
 	;;

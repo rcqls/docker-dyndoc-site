@@ -2,7 +2,7 @@
 
 cmd=$1
 shift
-script="../guest-tools/bin/.action.sh"
+script="RodaToolsName/bin/.action.sh"
 guest_script="/home/ubuntu/tools/bin/.action.sh"
 
 RootSrv=/home/ubuntu/RodaSrv 
@@ -59,10 +59,7 @@ pause)
 unpause)
     docker-compose unpause
     ;;
-### Installation scripts 
-update-guest-script) # update the guest (user-* root-*) scripts executed inside container
-    cp scripts/guest-install.sh ../guest-tools/bin/.install.sh
-    ;;
+### Installation scripts
 user-*) 
     echo ". /home/ubuntu/tools/bin/.install.sh" >> $script
     echo "${cmd} $*" >> $script
