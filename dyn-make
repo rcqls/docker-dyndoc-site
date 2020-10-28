@@ -186,7 +186,7 @@ site)
 	if [ "${rodaincport}" != "" ]; then
 		rodaport="$(($rodaport + $rodaincport))"
 	fi
-	rodawd=`cat ../.workdirs/${rodawdname}`
+	rodawd=`cat ../.workdirs/${rodawdname}/wdpath`
 	rodapublic="${rodawd}/RodaPublic"
 	rodadyndoclibrary="${rodawd}/dyndoc-library"
 	rodadyndocworld="${rodawd}/dyndoc-world"
