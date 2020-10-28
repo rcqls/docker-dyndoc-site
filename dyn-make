@@ -207,6 +207,7 @@ site)
 	txt=${txt//RodaSrvMongoPort/$rodamongoport}
 	txt=${txt//RodaSrvMongoExpressPort/$rodamongoexpressport}
 	txt=${txt//NetworkName/$networkname}
+	txt=${txt//MongoName/$rodamongoname}
 	rodatoolsname="../tools/${rodatoolsname}"
 	txt=${txt//RodaToolsName/$rodatoolsname}
 	echo "$txt" > "$site/docker-compose.yml"
