@@ -98,6 +98,6 @@ dpm | dyn-pkg | pkg)
      
 	echo "dpm install ${user}/${pkg}" > $script
 	echo "dpm link ${link}" >> $script
-    docker-compose exec --user root website bash ${guest_script}
+    docker-compose exec website bash ${guest_script}
     ;;
 esac
