@@ -186,7 +186,7 @@ site)
 	if [ "${rodaincport}" != "" ]; then
 		rodaport="$(($rodaport + $rodaincport))"
 	fi
-	rodawd=`cat ../../.workdirs/${rodawdname}`
+	rodawd=`cat ../.workdirs/${rodawdname}`
 	rodapublic="${rodawd}/RodaPublic"
 	rodadyndoclibrary="${rodawd}/dyndoc-library"
 	rodadyndocworld="${rodawd}/dyndoc-world"
@@ -206,9 +206,8 @@ site)
 	txt=${txt//RodaSrvMongoPwd/$rodamongopwd}
 	txt=${txt//RodaSrvMongoPort/$rodamongoport}
 	txt=${txt//RodaSrvMongoExpressPort/$rodamongoexpressport}
-	txt=${txt//RodaSrvMongoDir/$rodamongodir}
 	txt=${txt//NetworkName/$networkname}
-	rodatoolsname="../../tools/${rodatoolsname}"
+	rodatoolsname="../tools/${rodatoolsname}"
 	txt=${txt//RodaToolsName/$rodatoolsname}
 	echo "$txt" > "$site/docker-compose.yml"
 
