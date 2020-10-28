@@ -173,6 +173,8 @@ tools)
 	mkdir -p ../tools/${toolname}/bin
 	cp scripts/guest-install.sh ../tools/${toolname}/bin/.install.sh
 	cp -r share/tools/* ../tools/${toolname}/
+	### TODO:
+	## *.host service removed in dyn-site
 	;;
 site)
 	site="../sites/$1"
