@@ -148,14 +148,13 @@ mongo) ## characterized by an id
 	if [ "$1" != "" ]; then 
 		mongoname=$1
 	fi
-	mongodir="../dbs/${mongoname}"
 	if [ "${incport}" != "" ]; then
 		mongoport="$(($mongoport + $incport))"
 		mongoexpressport="$(($mongoexpressport + $incport))"
 	fi
-	mkdir -p $mongodir/data/db
-	mkdir -p $mongodir/data/configdb
-
+	mkdir -p ./data/db
+	mkdir -p ./data/configdb
+	mongodir="."
 	# creating docker-compose.yml
 	txt=`cat template/docker-compose.mongo.yml`
 	txt=${txt//MongoUser/$mongouser}
