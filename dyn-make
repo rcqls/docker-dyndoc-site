@@ -35,7 +35,6 @@ mongouser=mongo
 mongopwd=lol2mongo
 mongoport=27018
 mongoexpressport=8081
-mongodir=dyndoc-mongo
 
 while true 
 do
@@ -109,10 +108,6 @@ do
 		shift
 		mongoexpressport=$1
 	;;
-	--mongo-dir)
-		shift
-		mongodir=$1
-	;;
 	*)
 		break
 	;;
@@ -153,7 +148,7 @@ mongo) ## characterized by an id
 	if [ "$1" != "" ]; then 
 		mongoname=$1
 	fi
-	mongodir="${mongodir}/${mongoname}"
+	mongodir="../dbs/${mongoname}"
 	if [ "${incport}" != "" ]; then
 		mongoport="$(($mongoport + $incport))"
 		mongoexpressport="$(($mongoexpressport + $incport))"
@@ -169,7 +164,6 @@ mongo) ## characterized by an id
 	txt=${txt//MongoExpressPort/$mongoexpressport}
 	txt=${txt//MongoDir/$mongodir}
 	txt=${txt//NetworkName/$networkname}
-	mkdir -p ../dbs/${mongoname}
 	echo "$txt" > "../dbs/${mongoname}/docker-compose.yml"
 	;;
 tools)
