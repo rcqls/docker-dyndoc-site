@@ -26,7 +26,7 @@ services:
       - NetworkName
     external_links:
       - MongoName_mongo_1:mongo
-      - MongoName_mongo_express_1:mongoexpress
+      - MongoName_mongo-express_1:mongoexpress
 
 networks:
   NetworkName:
