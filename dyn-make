@@ -43,70 +43,87 @@ do
 	--net)
 		shift
 		networkname=$1
+		shift
 		;;
 	--wd-name|--workdir-name)
 		shift
 		rodawdname=$1
+		shift
 	;;
 	--tools-name)
 		shift
 		rodatoolsname=$1
+		shift
 	;;
 	--mongo-name)
 		shift
 		rodamongoname=$1
+		shift
 	;;
 	--inc-port)
 		shift
 		incport=$1
+		shift
 	;;
 	--port)
 		shift
 		rodaport=$1
+		shift
 	;;
 	--uid)
 		shift
 		rodauid=$1
+		shift
 	;;
 	--gid)
 		shift
 		rodagid=$1
+		shift
 	;;
 	-w|--wd|--working-dir)
 		shift
 		rodawd=$1
+		shift
 	;;
 	-t|--tools)
 		shift
 		rodatools=$1
+		shift
 	;;
 	-u|--ubuntu)
 		shift
 		dyndocubuntu=$1
+		shift
 	;;
 	--os)
 		shift
 		osidentifier=$1
+		shift
 	;;
 	--rversion)
 		shift
 		rversion=$1
+		shift
 	;;
 	--mongo-user)
 		shift
 		mongouser=$1
+		shift
 	;;
 	--mongo-pwd)
 		shift
 		mongopwd=$1
+		shift
 	;;
 	--mongo-port)
 		shift
 		mongoport=$1
+		shift
 	;;
 	--mongo-express-port)
 		shift
 		mongoexpressport=$1
+		shift
 	;;
 	*)
 		break
