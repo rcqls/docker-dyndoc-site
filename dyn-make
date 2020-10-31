@@ -210,7 +210,7 @@ site)
 	site="../sites/$1"
 	shift
 	mkdir -p $site/bin
-	mkdir -p $site/Dockerfiles
+	mkdir -p $site/DockerFiles
 
 	if [ "${rodaname}" = "" ]; then
 		rodaname="-${dyndocubuntu}"
@@ -254,7 +254,6 @@ site)
 	txt=${txt//DyndocRubyOSIDENTIFIER/$osidentifier}
 	txt=${txt//RodaSrvDyndocLibrary/$rodadyndoclibrary}
 	txt=${txt//RodaSrvDyndocWorld/$rodadyndocworld}
-	mkdir -p $site/DockerFiles
 	echo "$txt" > "$site/DockerFiles/Dockerfile-dyndoc"
 
 	# creating DockerFile-website
