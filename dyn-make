@@ -254,6 +254,7 @@ site)
 	txt=${txt//DyndocRubyOSIDENTIFIER/$osidentifier}
 	txt=${txt//RodaSrvDyndocLibrary/$rodadyndoclibrary}
 	txt=${txt//RodaSrvDyndocWorld/$rodadyndocworld}
+	mkdir -p $site/DockerFiles
 	echo "$txt" > "$site/DockerFiles/Dockerfile-dyndoc"
 
 	# creating DockerFile-website
