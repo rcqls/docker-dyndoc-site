@@ -15,6 +15,6 @@ RUN ln -s /home/ubuntu/tools/dyndoc /home/ubuntu/dyndoc
 ENV PATH=$PATH:/home/ubuntu/tools/bin
 ENV LD_LIBRARY_PATH /usr/lib/R/lib
 
-ADD ../dyndoc-servers.yml /home/ubuntu/.dyndoc-servers.yml
+ADD dyndoc-servers.yml /home/ubuntu/.dyndoc-servers.yml
 
 ENTRYPOINT /usr/local/bin/dyn-ctl start && /bin/bash
