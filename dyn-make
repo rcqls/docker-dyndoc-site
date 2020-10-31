@@ -10,7 +10,9 @@ RootSrv=/home/ubuntu/RodaSrv
 ## 
 rodaname=""
 rodaincport=""
-rodaport=9700
+rodaporthost=9700
+rodaportguest=9294
+dynsrvport=7777
 rodauid=1000
 rodagid=1000
 rodatools=$HOME/Share/Roda
@@ -65,9 +67,19 @@ do
 		incport=$1
 		shift
 	;;
-	--port)
+	--guest-port)
 		shift
-		rodaport=$1
+		rodaportguest=$1
+		shift
+	;;
+	--host-port)
+		shift
+		rodaporthost=$1
+		shift
+	;;
+	--dyn-port)
+		shift
+		dynsrvport=$1
 		shift
 	;;
 	--uid)
@@ -203,7 +215,9 @@ site)
 		rodaname="-${dyndocubuntu}"
 	fi 
 	if [ "${rodaincport}" != "" ]; then
-		rodaport="$(($rodaport + $rodaincport))"
+		rodaportguest="$(($rodaportguest + $rodaincport))"
+		rodaporthost="$(($rodaporthost + $rodaincport))"
+		dynsrvport="$(($dynsrvport + $rodaincport))"
 	fi
 	rodawd=`cat ../.workdirs/${rodawdname}/wdpath`
 	rodapublic="${rodawd}/RodaPublic"
@@ -213,7 +227,8 @@ site)
 	# creating docker-compose.yml
 	txt=`cat template/docker-compose.yml`
 	txt=${txt//RodaName/$rodaname}
-	txt=${txt//RodaSrvPort/$rodaport}
+	txt=${txt//RodaSrvPortGuest/$rodaportguest}
+	txt=${txt//RodaSrvPortHost/$rodaporthost}
 	txt=${txt//RodaSrvUID/$rodauid}
 	txt=${txt//RodaSrvGID/$rodagid}
 	txt=${txt//RodaSrvPublic/$rodapublic}
@@ -221,10 +236,6 @@ site)
 	txt=${txt//DyndocRubyUbuntu/$dyndocubuntu}
 	txt=${txt//RodaSrvDyndocLibrary/$rodadyndoclibrary}
 	txt=${txt//RodaSrvDyndocWorld/$rodadyndocworld}
-	txt=${txt//RodaSrvMongoUser/$rodamongouser}
-	txt=${txt//RodaSrvMongoPwd/$rodamongopwd}
-	txt=${txt//RodaSrvMongoPort/$rodamongoport}
-	txt=${txt//RodaSrvMongoExpressPort/$rodamongoexpressport}
 	txt=${txt//NetworkName/$networkname}
 	txt=${txt//MongoName/$rodamongoname}
 	rodatoolsname="../../tools/${rodatoolsname}"
@@ -233,7 +244,6 @@ site)
 
 	# creating DockerFile-dyndoc
 	txt=`cat template/Dockerfile-dyndoc`
-	txt=${txt//RodaSrvPort/$rodaport}
 	txt=${txt//RodaSrvUID/$rodauid}
 	txt=${txt//RodaSrvGID/$rodagid}
 	txt=${txt//RodaSrvPublic/$rodapublic}
@@ -247,7 +257,7 @@ site)
 
 	# creating DockerFile-website
 	txt=`cat template/Dockerfile-website`
-	txt=${txt//RodaSrvPort/$rodaport}
+	txt=${txt//RodaSrvPortGuest/$rodaportguest}
 	txt=${txt//RodaSrvUID/$rodauid}
 	txt=${txt//RodaSrvGID/$rodagid}
 	txt=${txt//RodaSrvPublic/$rodapublic}
@@ -257,7 +267,14 @@ site)
 	txt=${txt//RodaSrvDyndocWorld/$rodadyndocworld}
 	echo "$txt" > "$site/DockerFiles/Dockerfile-website"
 
-	# creating DockerFile-website
+	# creating dyndoc-servers.yml
+	echo "---" > "$site/dyndoc-servers.yml"
+	echo "ports:" >> "$site/dyndoc-servers.yml"
+	echo "  dyn-srv: $dynport" >> "$site/dyndoc-servers.yml"
+	echo "  dyn-cli: $dynport" >> "$site/dyndoc-servers.yml"
+	echo "  dyn-http: $rodaportguest" >> "$site/dyndoc-servers.yml"
+	
+	# creating dyn-site
 	txt=`cat template/dyn-site`
 	txt=${txt//RodaToolsName/$rodatoolsname}
 	echo "$txt" > "$site/dyn-site"

@@ -3,7 +3,7 @@ MAINTAINER "Cqls Team"
 
 USER ubuntu
 
-EXPOSE 9294
+EXPOSE RodaSrvPortGuest
 
 RUN mkdir -p /home/ubuntu/RodaSrv/public/edit
 RUN mkdir -p /home/ubuntu/RodaSrv/public/users

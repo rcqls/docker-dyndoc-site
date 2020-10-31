@@ -11,7 +11,7 @@ services:
     build:
       context: DockerFiles
       dockerfile: Dockerfile-website
-    image: rcqls/website-DyndocRubyUbuntu
+    image: rcqls/website-DyndocRubyUbuntu-portRodaSrvPortGuest
     restart: always
     volumes:
       - RodaSrvPublic:/home/ubuntu/RodaSrv/public
@@ -20,7 +20,7 @@ services:
       - RodaSrvDyndocWorld:/home/ubuntu/.dyndoc-world
       - RodaToolsName:/home/ubuntu/tools
     ports:
-      - RodaSrvPort:9294
+      - RodaSrvPortHost:RodaSrvPortGuest
     tty: true
     networks:
       - NetworkName
