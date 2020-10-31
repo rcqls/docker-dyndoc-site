@@ -192,6 +192,7 @@ mongo) ## characterized by an id
 	txt=${txt//MongoExpressPort/$mongoexpressport}
 	txt=${txt//MongoDir/$mongodir}
 	txt=${txt//NetworkName/$networkname}
+	mkdir -p ../dbs/${mongoname}
 	echo "$txt" > "../dbs/${mongoname}/docker-compose.yml"
 	;;
 tools)
