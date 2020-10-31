@@ -268,10 +268,10 @@ site)
 	echo "$txt" > "$site/DockerFiles/Dockerfile-website"
 
 	# creating dyndoc-servers.yml
-	echo "---" > "$site/dyndoc-servers.yml"
-	echo "ports:" >> "$site/dyndoc-servers.yml"
-	echo "  dyn-srv: $dynsrvport" >> "$site/dyndoc-servers.yml"
-	echo "  dyn-cli: $dynsrvport" >> "$site/dyndoc-servers.yml"
+	echo "---" > "$site/DockerFiles/dyndoc-servers.yml"
+	echo "ports:" >> "$site/DockerFiles/dyndoc-servers.yml"
+	echo "  dyn-srv: $dynsrvport" >> "$site/DockerFiles/dyndoc-servers.yml"
+	echo "  dyn-cli: $dynsrvport" >> "$site/DockerFiles/dyndoc-servers.yml"
 	echo "  dyn-http: $rodaportguest" >> "$site/DockerFiles/dyndoc-servers.yml"
 
 	# creating dyn-site
