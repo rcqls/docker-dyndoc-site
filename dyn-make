@@ -270,8 +270,8 @@ site)
 	# creating dyndoc-servers.yml
 	echo "---" > "$site/dyndoc-servers.yml"
 	echo "ports:" >> "$site/dyndoc-servers.yml"
-	echo "  dyn-srv: $dynport" >> "$site/dyndoc-servers.yml"
-	echo "  dyn-cli: $dynport" >> "$site/dyndoc-servers.yml"
+	echo "  dyn-srv: $dynsrvport" >> "$site/dyndoc-servers.yml"
+	echo "  dyn-cli: $dynsrvport" >> "$site/dyndoc-servers.yml"
 	echo "  dyn-http: $rodaportguest" >> "$site/dyndoc-servers.yml"
 
 	# creating dyn-site
