@@ -12,9 +12,20 @@ RUN mkdir -p /home/ubuntu/.dyndoc-world
 RUN mkdir -p /home/ubuntu/tools/bin
 RUN ln -s /home/ubuntu/tools/dyndoc /home/ubuntu/dyndoc
 
+RUN mkdir -p /home/ubuntu/RodaSrv/edit
+RUN mkdir -p /home/ubuntu/RodaSrv/public
+WORKDIR /home/ubuntu/RodaSrv
+RUN ln -sf .tools/system system
+WORKDIR /home/ubuntu/RodaSrv/public
+RUN ln -sf ../.tools/tools tools
+
 ENV PATH=$PATH:/home/ubuntu/tools/bin
 ENV LD_LIBRARY_PATH /usr/lib/R/lib
 
 ADD dyndoc-servers.yml /home/ubuntu/.dyndoc-servers.yml
+
+WORKDIR /home/ubuntu
+
+RUN ln -sf tools/etc/dyndoc.yml .dyndoc.yml
 
 ENTRYPOINT /usr/local/bin/dyn-ctl start && /bin/bash

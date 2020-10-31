@@ -1,52 +1,53 @@
-user-rodasrv() {
-    ## Create the RodaSrv folders inside container
-    mkdir -p /home/ubuntu/RodaSrv/edit
-    mkdir -p /home/ubuntu/RodaSrv/public
-    cd /home/ubuntu/RodaSrv
-	ln -sf .tools/system system
-	cd public
-	ln -sf ../.tools/tools tools
-}
+### No more needed!
+# user-rodasrv() {
+#     ## Create the RodaSrv folders inside container
+#     mkdir -p /home/ubuntu/RodaSrv/edit
+#     mkdir -p /home/ubuntu/RodaSrv/public
+#     cd /home/ubuntu/RodaSrv
+# 	ln -sf .tools/system system
+# 	cd public
+# 	ln -sf ../.tools/tools tools
+# }
 
-user-etc-dyn-html() {
-	## Config file
-    mkdir -p /home/ubuntu/dyndoc/etc
-    echo '---' > /home/ubuntu/dyndoc/etc/dyn-html.yml
-    echo 'root: /home/ubuntu/RodaSrv' >> /home/ubuntu/dyndoc/etc/dyn-html.yml
-}
+# user-etc-dyn-html() {
+# 	## Config file
+#     mkdir -p /home/ubuntu/dyndoc/etc
+#     echo '---' > /home/ubuntu/dyndoc/etc/dyn-html.yml
+#     echo 'root: /home/ubuntu/RodaSrv' >> /home/ubuntu/dyndoc/etc/dyn-html.yml
+# }
 
-user-ln-tools-etc() {
-	cd /home/ubuntu
-	if [ -f tools/etc/bashrc ]; then
-		ln -sf tools/etc/bashrc .bashrc
-	else
-		echo "tools/etc/bashrc missing and not linked to .bashrc"
-	fi
-	if [ -f tools/etc/dyndoc.yml ]; then
-		ln -sf tools/etc/dyndoc.yml .dyndoc.yml
-	else
-		echo "tools/etc/dyndoc.yml missing and not linked to .dyndoc.yml"
-	fi
-}
+# user-ln-tools-etc() {
+# 	cd /home/ubuntu
+# 	if [ -f tools/etc/bashrc ]; then
+# 		ln -sf tools/etc/bashrc .bashrc
+# 	else
+# 		echo "tools/etc/bashrc missing and not linked to .bashrc"
+# 	fi
+# 	if [ -f tools/etc/dyndoc.yml ]; then
+# 		ln -sf tools/etc/dyndoc.yml .dyndoc.yml
+# 	else
+# 		echo "tools/etc/dyndoc.yml missing and not linked to .dyndoc.yml"
+# 	fi
+# }
 
-user-install-dyndoc() {
-	if ! [[ -L /home/ubuntu/dyndoc && -d /home/ubuntu/dyndoc ]]; then
-		cd /home/ubuntu
-		if [ -d tools/dyndoc ]; then
-			if [ -d dyndoc ]; then
-				rm -fr dyndoc
-			fi
-		else
-			mv dyndoc tools/
-		fi
-		ln -sf tools/dyndoc dyndoc
-	fi
-}
+# user-install-dyndoc() {
+# 	if ! [[ -L /home/ubuntu/dyndoc && -d /home/ubuntu/dyndoc ]]; then
+# 		cd /home/ubuntu
+# 		if [ -d tools/dyndoc ]; then
+# 			if [ -d dyndoc ]; then
+# 				rm -fr dyndoc
+# 			fi
+# 		else
+# 			mv dyndoc tools/
+# 		fi
+# 		ln -sf tools/dyndoc dyndoc
+# 	fi
+# }
 
 
-user-dyn-init-install-etc() {
-	dyn-init install etc
-}
+# user-dyn-init-install-etc() {
+# 	dyn-init install etc
+# }
 
 user-export-rubylib() {
 	mkdir -p /home/ubuntu/tools/etc
