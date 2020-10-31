@@ -10,8 +10,11 @@ RUN mkdir -p /home/ubuntu/RodaSrv/public/users
 RUN mkdir -p /home/ubuntu/dyndoc-library
 RUN mkdir -p /home/ubuntu/.dyndoc-world
 RUN mkdir -p /home/ubuntu/tools/bin
+RUN ln -s /home/ubuntu/tools/dyndoc /home/ubuntu/dyndoc
 
 ENV PATH=$PATH:/home/ubuntu/tools/bin
 ENV LD_LIBRARY_PATH /usr/lib/R/lib
+
+ADD dyndoc-servers.yml /home/ubuntu/.dyndoc-servers.yml
 
 ENTRYPOINT /usr/local/bin/dyn-ctl start && /bin/bash

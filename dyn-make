@@ -9,7 +9,7 @@ RootSrv=/home/ubuntu/RodaSrv
 
 ## 
 rodaname=""
-rodaincport=""
+incport=""
 rodaporthost=9700
 rodaportguest=9294
 dynsrvport=7777
@@ -214,10 +214,10 @@ site)
 	if [ "${rodaname}" = "" ]; then
 		rodaname="-${dyndocubuntu}"
 	fi 
-	if [ "${rodaincport}" != "" ]; then
-		rodaportguest="$(($rodaportguest + $rodaincport))"
-		rodaporthost="$(($rodaporthost + $rodaincport))"
-		dynsrvport="$(($dynsrvport + $rodaincport))"
+	if [ "${incport}" != "" ]; then
+		rodaportguest="$(($rodaportguest + $incport))"
+		rodaporthost="$(($rodaporthost + $incport))"
+		dynsrvport="$(($dynsrvport + $incport))"
 	fi
 	rodawd=`cat ../.workdirs/${rodawdname}/wdpath`
 	rodapublic="${rodawd}/RodaPublic"
@@ -273,7 +273,7 @@ site)
 	echo "  dyn-srv: $dynport" >> "$site/dyndoc-servers.yml"
 	echo "  dyn-cli: $dynport" >> "$site/dyndoc-servers.yml"
 	echo "  dyn-http: $rodaportguest" >> "$site/dyndoc-servers.yml"
-	
+
 	# creating dyn-site
 	txt=`cat template/dyn-site`
 	txt=${txt//RodaToolsName/$rodatoolsname}
