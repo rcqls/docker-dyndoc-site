@@ -51,7 +51,7 @@ class App < Roda
 
     r.on "counter" do
 
-      init_mongo("mongo:MongoPort")
+      init_mongo("mongo:27017")
       mongo_counter=@mongo.use("counter")
       puts "counter!!!!!!"
 
@@ -542,7 +542,7 @@ class App < Roda
   end
 
   def mongo_save(db,col,doc)
-    init_mongo("mongo:MongoPort")
+    init_mongo("mongo:27017")
     db_mongo=@mongo.use(db)
     if mongo?
       collection = db_mongo[col.to_sym]
