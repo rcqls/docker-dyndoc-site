@@ -24,6 +24,8 @@ services:
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=MongoUser
       - ME_CONFIG_MONGODB_ADMINPASSWORD=MongoPwd
+      - ME_CONFIG_BASICAUTH_USERNAME=MongoExpressUser
+      - ME_CONFIG_BASICAUTH_PASSWORD=MongoExpressPwd
     networks:
       - NetworkName
 

@@ -33,10 +33,12 @@ networkname=dyn_network
 
 
 
-mongouser=mongo
-mongopwd=lol2mongo
+mongouser=""
+mongopwd=""
 mongoport=27018
 mongoexpressport=8081
+mongoexpressuser=""
+mongoexpresspwd=""
 
 while true 
 do
@@ -137,6 +139,16 @@ do
 		mongoexpressport=$1
 		shift
 	;;
+	--mongo-express-user)
+		shift
+		mongoexpressuser=$1
+		shift
+	;;
+	--mongo-express-pwd)
+		shift
+		mongoexpresspwd=$1
+		shift
+	;;
 	*)
 		break
 	;;
@@ -189,6 +201,8 @@ mongo) ## characterized by an id
 	txt=${txt//MongoUser/$mongouser}
 	txt=${txt//MongoPwd/$mongopwd}
 	txt=${txt//MongoPort/$mongoport}
+	txt=${txt//MongoExpressUser/$mongoexpressuser}
+	txt=${txt//MongoExpressPwd/$mongoexpresspwd}
 	txt=${txt//MongoExpressPort/$mongoexpressport}
 	txt=${txt//MongoDir/$mongodir}
 	txt=${txt//NetworkName/$networkname}

@@ -46,12 +46,12 @@ class App < Roda
 
     # GET / request
     r.root do
-      r.redirect "/hello"
+      r.redirect "/DynStudio"
     end
 
     r.on "counter" do
 
-      init_mongo("mongo:27017")
+      init_mongo("mongo:MongoPort")
       mongo_counter=@mongo.use("counter")
       puts "counter!!!!!!"
 
@@ -533,7 +533,7 @@ class App < Roda
   def init_mongo(address)
     require 'mongo'
     client = Mongo::Client.new([ address ])
-    @mongo = client.with(user: 'mongo', password: 'lol2mongo')
+    @mongo = client.with(user: 'MongoUser', password: 'MongoPwd')
     @mongo_srv=@mongo.cluster.servers.first
   end
 
@@ -542,7 +542,7 @@ class App < Roda
   end
 
   def mongo_save(db,col,doc)
-    init_mongo("mongo:27017")
+    init_mongo("mongo:MongoPort")
     db_mongo=@mongo.use(db)
     if mongo?
       collection = db_mongo[col.to_sym]
