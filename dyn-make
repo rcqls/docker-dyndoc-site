@@ -208,15 +208,31 @@ mongo) ## characterized by an id
 	txt=${txt//NetworkName/$networkname}
 	mkdir -p ../dbs/${mongoname}
 	echo "$txt" > "../dbs/${mongoname}/docker-compose.yml"
+	
+	# creating .srv.ru
+	txt=`cat share/tools/dyn-html/srv.ru`
+	txt=${txt//MongoUser/$mongouser}
+	txt=${txt//MongoPwd/$mongopwd}
+	txt=${txt//MongoPort/$mongoport}
+	echo "$txt" > "../dbs/${mongoname}/.srv.ru"
 	;;
 tools)
 	toolname=default
 	if [ "$1" != "" ]; then 
 		toolname=$1
 	fi
+	if [ "$2" = "" ]; then
+		mongoname=$toolname
+		toolname=default
+	else
+		mongoname=$2
+	fi
 	mkdir -p ../tools/${toolname}/bin
 	cp scripts/guest-install.sh ../tools/${toolname}/bin/.install.sh
 	cp -r share/tools/* ../tools/${toolname}/
+	if [ -f "../dbs/${mongoname}/.srv.ru" ]; then
+		cp ../dbs/${mongoname}/.srv.ru ../tools/${toolname}/dyn-html/srv.ru
+	fi
 	### TODO:
 	## *.host service removed in dyn-site
 	;;
