@@ -94,11 +94,6 @@ do
 		rodagid=$1
 		shift
 	;;
-	-w|--wd|--working-dir)
-		shift
-		rodawd=$1
-		shift
-	;;
 	-t|--tools)
 		shift
 		rodatools=$1
