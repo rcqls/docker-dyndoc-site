@@ -24,7 +24,7 @@ module DyndocWorld
 	def DyndocWorld.cfg(mode=:secret) #:prj, :secret
 		cfg={}
 		etc = File.join(DyndocWorld.etc,mode.to_s+".yml")
-		cfg = YAML::load_file(etc) if DyndocWorld.etc and File.exists? etc
+		cfg = YAML::load_file(etc) if DyndocWorld.etc and File.exist? etc
 		return cfg
 	end
 
@@ -73,7 +73,7 @@ module DyndocWorld
 		min,sec=(Time.now-File.ctime(notify_out)).divmod(60)
 		text=File.read(notify_out)
 		text=text.gsub(".edit/","").split("/")[6..-1].join("/") if text.include? "/"
-		res=(File.exists? notify_out) ? ("("+min.to_s+"m "+sec.round(1).to_s+"s) "+text) : "No notify file!"
+		res=(File.exist? notify_out) ? ("("+min.to_s+"m "+sec.round(1).to_s+"s) "+text) : "No notify file!"
 		DyndocWorld.debug_me("notify?: res "+res,true)
 		res
 	end
@@ -92,10 +92,10 @@ module DyndocWorld
 			case mode
 			when "public","dynlib","layout","upload"
 				prj_file=File.join(DyndocWorld.public_root,"users",webuser)
-				prj_file=(Dir.exists? prj_file) ? File.join(prj_file,mode,root,parts) : ""
+				prj_file=(Dir.exist? prj_file) ? File.join(prj_file,mode,root,parts) : ""
 			when "edit"
 				prj_file=File.join(DyndocWorld.public_root,"users",webuser,".edit")
-				prj_file=(Dir.exists? prj_file) ? File.join(prj_file,root,parts) : ""
+				prj_file=(Dir.exist? prj_file) ? File.join(prj_file,root,parts) : ""
 			when "dynworld"
 				prj_file=File.join(DyndocWorld.root,webuser,root,parts)
 			end
@@ -152,7 +152,7 @@ module DyndocWorld
 
 	def DyndocWorld.prj_open_file(prj_file)
 		res={success: false}
-		if File.exists? prj_file
+		if File.exist? prj_file
 			res[:content]=File.read(prj_file)
 			res[:success]=true
 		end

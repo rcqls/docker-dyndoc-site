@@ -85,6 +85,17 @@ user-dyndoc-jl() {
         echo "  langs: R,jl" >> $script
 }
 
+user-install-v() {
+        mkdir -p /home/ubuntu/tools/install/src
+        cd /home/ubuntu/tools/install/src
+		git clone https://github.com/vlang/v
+
+        cd /home/ubuntu/tools/install/src/v
+		make
+		cd /home/ubuntu/tools/bin
+        ln -sf ../install/src/v/v v
+}
+
 ## A appeler en début d'install
 root-install-begin() {
 	apt-get update -qq
